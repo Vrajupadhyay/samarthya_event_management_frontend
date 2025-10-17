@@ -7,13 +7,12 @@ import './Scanner.css';
 const Scanner = () => {
   const navigate = useNavigate();
   const [scanning, setScanning] = useState(false);
-  const [cameraMode, setCameraMode] = useState(false);
+  const [cameraMode, setCameraMode] = useState(true); // Start with camera mode ON by default
   const [manualInput, setManualInput] = useState('');
   const [scanResult, setScanResult] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [marking, setMarking] = useState(false);
-  const [scannedCodes, setScannedCodes] = useState(new Set());
   const scannerRef = useRef(null);
   const html5QrcodeScannerRef = useRef(null);
 
@@ -52,17 +51,6 @@ const Scanner = () => {
       html5QrcodeScannerRef.current.pause(true);
     }
     
-    // Check if this code was already scanned in this session
-    if (scannedCodes.has(decodedText.trim())) {
-      setError('This QR code was already scanned in this session');
-      if (html5QrcodeScannerRef.current) {
-        html5QrcodeScannerRef.current.clear();
-        html5QrcodeScannerRef.current = null;
-      }
-      setCameraMode(false);
-      return;
-    }
-    
     setCameraMode(false);
     setLoading(true);
     setError('');
@@ -72,9 +60,6 @@ const Scanner = () => {
       // Fetch registration details without marking attendance
       const response = await scanAPI.getDetails(decodedText.trim());
       setScanResult(response);
-      
-      // Add to scanned codes set
-      setScannedCodes(prev => new Set([...prev, decodedText.trim()]));
       
       // Clear the scanner
       if (html5QrcodeScannerRef.current) {
@@ -121,12 +106,6 @@ const Scanner = () => {
     if (!manualInput.trim()) return;
 
     const registrationId = manualInput.trim();
-    
-    // Check if this code was already scanned in this session
-    if (scannedCodes.has(registrationId)) {
-      setError('This QR code was already scanned in this session');
-      return;
-    }
 
     setLoading(true);
     setError('');
@@ -137,9 +116,6 @@ const Scanner = () => {
       const response = await scanAPI.getDetails(registrationId);
       setScanResult(response);
       setManualInput('');
-      
-      // Add to scanned codes set
-      setScannedCodes(prev => new Set([...prev, registrationId]));
     } catch (err) {
       setError(err.message || 'Failed to fetch details');
     } finally {
@@ -177,7 +153,6 @@ const Scanner = () => {
       html5QrcodeScannerRef.current = null;
     }
     setCameraMode(false);
-    // Don't clear scannedCodes - keep tracking across scans
   };
 
   return (
@@ -195,67 +170,14 @@ const Scanner = () => {
       <div className="scanner-content">
         {!scanResult && !error && (
           <div className="scanner-section">
-            <div className="scanner-mode-toggle">
-              <button 
-                className={`mode-btn ${!cameraMode ? 'active' : ''}`}
-                onClick={() => {
-                  if (cameraMode) toggleCameraMode();
-                }}
-              >
-                ⌨️ Manual Entry
-              </button>
-              <button 
-                className={`mode-btn ${cameraMode ? 'active' : ''}`}
-                onClick={toggleCameraMode}
-              >
-                📷 Camera Scan
-              </button>
-            </div>
-
-            {!cameraMode ? (
-              <>
-                <div className="scanner-instructions">
-                  <h2>How to Scan</h2>
-                  <ol>
-                    <li>Enter the Registration ID from the QR code</li>
-                    <li>Or use Camera Scan mode to scan directly</li>
-                    <li>Submit to verify entry</li>
-                  </ol>
-                </div>
-
-                <form onSubmit={handleManualScan} className="manual-input-form">
-                  <h3>Enter Registration ID</h3>
-                  <div className="input-group">
-                    <input
-                      type="text"
-                      value={manualInput}
-                      onChange={(e) => setManualInput(e.target.value.toUpperCase())}
-                      placeholder="DJ2025-0001"
-                      className="scan-input"
-                      autoFocus
-                      disabled={loading}
-                    />
-                    <button 
-                      type="submit" 
-                      className="scan-btn"
-                      disabled={loading || !manualInput.trim()}
-                    >
-                      {loading ? 'Verifying...' : 'Verify Entry'}
-                    </button>
-                  </div>
-                  <p className="input-hint">Format: DJ2025-XXXX</p>
-                </form>
-
-                <div className="scanner-note">
-                  <p>💡 <strong>Tip:</strong> Click Camera Scan button above to scan QR codes directly</p>
-                </div>
-              </>
-            ) : (
+            {cameraMode ? (
               <div className="camera-scanner-section">
-                <h2>📷 Camera Scanner</h2>
-                <p className="camera-instructions">
-                  Allow camera access when prompted, then point your camera at the QR code
-                </p>
+                <div className="scanner-header-simple">
+                  <h2>📷 Scan QR Code</h2>
+                  <p className="camera-instructions-simple">
+                    Point your camera at the QR code
+                  </p>
+                </div>
                 
                 <div id="qr-reader" ref={scannerRef} className="qr-reader-container"></div>
                 
@@ -266,9 +188,47 @@ const Scanner = () => {
                   </div>
                 )}
                 
-                <button className="cancel-camera-btn" onClick={toggleCameraMode}>
-                  Cancel Camera Scan
-                </button>
+                <div className="scanner-actions-simple">
+                  <button className="btn-switch-mode" onClick={() => setCameraMode(false)}>
+                    ⌨️ Enter ID Manually
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="manual-input-section">
+                <div className="scanner-header-simple">
+                  <h2>⌨️ Enter Registration ID</h2>
+                  <p className="camera-instructions-simple">
+                    Type the registration ID from the ticket
+                  </p>
+                </div>
+
+                <form onSubmit={handleManualScan} className="manual-input-form-simple">
+                  <div className="input-group-simple">
+                    <input
+                      type="text"
+                      value={manualInput}
+                      onChange={(e) => setManualInput(e.target.value.toUpperCase())}
+                      placeholder="DJ2025-0001"
+                      className="scan-input-large"
+                      autoFocus
+                      disabled={loading}
+                    />
+                    <button 
+                      type="submit" 
+                      className="scan-btn-large"
+                      disabled={loading || !manualInput.trim()}
+                    >
+                      {loading ? '⏳ Verifying...' : '✓ Verify'}
+                    </button>
+                  </div>
+                </form>
+
+                <div className="scanner-actions-simple">
+                  <button className="btn-switch-mode" onClick={() => setCameraMode(true)}>
+                    📷 Use Camera Instead
+                  </button>
+                </div>
               </div>
             )}
           </div>
@@ -286,139 +246,103 @@ const Scanner = () => {
         )}
 
         {scanResult && scanResult.valid && (
-          <div className={`result-section compact ${
-            scanResult.justMarked ? 'success-result' : 
-            (scanResult.data.attended ? 'warning-result' : 'info-result')
+          <div className={`result-section-simple ${
+            scanResult.justMarked ? 'success-state' : 
+            (scanResult.data.attended ? 'already-checked' : 'ready-state')
           }`}>
             
-            {/* Status Header */}
-            <div className="result-header">
-              <div className="status-badge-large">
-                {scanResult.justMarked ? '✅' : (scanResult.data.attended ? '⚠️' : '📋')}
-                <span>
-                  {scanResult.justMarked ? 'Check-In Complete' : 
-                   (scanResult.data.attended ? 'Already Checked In' : 'Ready to Check In')}
-                </span>
-              </div>
-            </div>
-
-            {/* Main Info Grid - Compact 2-column layout */}
-            <div className="info-grid-compact">
-              <div className="info-card">
-                <div className="info-label">Guest Name</div>
-                <div className="info-value large">{scanResult.data.name}</div>
-              </div>
-              
-              <div className="info-card">
-                <div className="info-label">Registration ID</div>
-                <div className="info-value mono">{scanResult.data.registrationId}</div>
-              </div>
-              
-              <div className="info-card highlight">
-                <div className="info-label">Type</div>
-                <div className="info-value">{scanResult.data.type}</div>
-              </div>
-              
-              <div className="info-card highlight">
-                <div className="info-label">Total Guests</div>
-                <div className="info-value large">{scanResult.data.totalMembers}</div>
-              </div>
-              
-              <div className="info-card">
-                <div className="info-label">Status</div>
-                <div className={`info-value ${scanResult.data.status === 'Accepted' ? 'status-accepted' : 'status-pending'}`}>
-                  {scanResult.data.status === 'Accepted' ? '✓ ' : '⏳ '}{scanResult.data.status}
-                </div>
-              </div>
-              
-              <div className="info-card">
-                <div className="info-label">Payment</div>
-                <div className="info-value">₹{scanResult.data.amount.toLocaleString()}</div>
-              </div>
-            </div>
-
-            {/* Additional Members - Compact Pills */}
-            {scanResult.data.additionalMembers && scanResult.data.additionalMembers.length > 0 && (
-              <div className="members-compact">
-                <div className="members-label">
-                  👥 +{scanResult.data.additionalMembers.length} Guest{scanResult.data.additionalMembers.length > 1 ? 's' : ''}:
-                </div>
-                <div className="members-pills">
-                  {scanResult.data.additionalMembers.map((member, index) => (
-                    <span key={index} className="member-pill">
-                      {member.firstName} {member.lastName}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Check-in Status Alert */}
-            {scanResult.data.attended && !scanResult.justMarked && (
-              <div className="alert-banner warning">
-                <span className="alert-icon">⚠️</span>
-                <div className="alert-content">
-                  <strong>Already Checked In</strong>
-                  <span className="alert-time">
+            {/* Large Status Indicator */}
+            <div className="status-hero">
+              {scanResult.justMarked ? (
+                <>
+                  <div className="status-icon success">✅</div>
+                  <h2 className="status-title">Check-In Complete!</h2>
+                </>
+              ) : scanResult.data.attended ? (
+                <>
+                  <div className="status-icon warning">⚠️</div>
+                  <h2 className="status-title">Already Checked In</h2>
+                  <p className="status-time">
                     {new Date(scanResult.data.attendedAt).toLocaleString('en-IN', {
                       day: 'numeric',
                       month: 'short',
                       hour: '2-digit',
                       minute: '2-digit'
                     })}
-                  </span>
+                  </p>
+                </>
+              ) : scanResult.data.status === 'Accepted' ? (
+                <>
+                  <div className="status-icon ready">✓</div>
+                  <h2 className="status-title">Ready to Check In</h2>
+                </>
+              ) : (
+                <>
+                  <div className="status-icon error">🚫</div>
+                  <h2 className="status-title">Not Approved</h2>
+                  <p className="status-time">Registration pending approval</p>
+                </>
+              )}
+            </div>
+
+            {/* Guest Information - Clean 2-Row Layout */}
+            <div className="guest-info-simple">
+              <div className="guest-main">
+                <div className="guest-name">{scanResult.data.name}</div>
+                <div className="guest-id">{scanResult.data.registrationId}</div>
+              </div>
+              
+              <div className="guest-details-row">
+                <div className="detail-chip">
+                  <span className="chip-label">Type:</span>
+                  <span className="chip-value">{scanResult.data.type}</span>
+                </div>
+                <div className="detail-chip highlight">
+                  <span className="chip-label">Guests:</span>
+                  <span className="chip-value-large">{scanResult.data.totalMembers}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Additional Members - Simple List */}
+            {scanResult.data.additionalMembers && scanResult.data.additionalMembers.length > 0 && (
+              <div className="members-simple">
+                <div className="members-title">
+                  +{scanResult.data.additionalMembers.length} Additional Guest{scanResult.data.additionalMembers.length > 1 ? 's' : ''}:
+                </div>
+                <div className="members-names">
+                  {scanResult.data.additionalMembers.map((member, index) => (
+                    <span key={index} className="member-name">
+                      {member.firstName} {member.lastName}
+                    </span>
+                  )).reduce((prev, curr) => [prev, ', ', curr])}
                 </div>
               </div>
             )}
 
-            {scanResult.justMarked && (
-              <div className="alert-banner success">
-                <span className="alert-icon">✅</span>
-                <div className="alert-content">
-                  <strong>Check-In Successful!</strong>
-                  <span className="alert-time">
-                    Entry allowed at {new Date(scanResult.data.attendedAt).toLocaleString('en-IN', {
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    })}
-                  </span>
-                </div>
-              </div>
-            )}
-
-            {scanResult.data.status !== 'Accepted' && (
-              <div className="alert-banner error">
-                <span className="alert-icon">🚫</span>
-                <div className="alert-content">
-                  <strong>Cannot Check In</strong>
-                  <span className="alert-time">Registration not approved</span>
-                </div>
-              </div>
-            )}
-
-            {/* Action Buttons - Compact */}
-            <div className="action-buttons-compact">
+            {/* Action Buttons - Large and Clear */}
+            <div className="actions-simple">
               {!scanResult.data.attended && !scanResult.justMarked && scanResult.data.status === 'Accepted' && (
                 <button 
-                  className="btn-primary-large" 
+                  className="btn-check-in" 
                   onClick={handleMarkAttendance}
                   disabled={marking}
                 >
                   {marking ? (
                     <>
                       <span className="spinner-small"></span>
-                      Processing...
+                      Marking Attendance...
                     </>
                   ) : (
                     <>
-                      ✓ Confirm Check-In
+                      ✓ Mark Attendance
                     </>
                   )}
                 </button>
               )}
               
-              <button className="btn-secondary-large" onClick={resetScan}>
-                ← Scan Next
+              <button className="btn-next-scan" onClick={resetScan}>
+                Scan Next Guest →
               </button>
             </div>
           </div>

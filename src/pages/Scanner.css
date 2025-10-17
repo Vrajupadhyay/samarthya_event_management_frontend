@@ -980,3 +980,442 @@
   }
 }
 
+/* Simplified Scanner UI Styles */
+.scanner-header-simple {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.scanner-header-simple h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.camera-instructions-simple {
+  font-size: 1rem;
+  opacity: 0.8;
+  margin: 0;
+}
+
+.camera-scanner-section,
+.manual-input-section {
+  width: 100%;
+}
+
+.manual-input-form-simple {
+  margin: 2rem 0;
+}
+
+.input-group-simple {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.scan-input-large {
+  width: 100%;
+  padding: 1.2rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 2px;
+  transition: all 0.3s ease;
+}
+
+.scan-input-large:focus {
+  outline: none;
+  border-color: #667eea;
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+}
+
+.scan-input-large::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 1px;
+}
+
+.scan-btn-large {
+  width: 100%;
+  padding: 1.2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.scan-btn-large:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.scan-btn-large:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.scanner-actions-simple {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.btn-switch-mode {
+  padding: 0.8rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-switch-mode:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Mobile optimizations for simplified UI */
+@media (max-width: 768px) {
+  .scanner-header-simple h2 {
+    font-size: 1.6rem;
+  }
+
+  .scan-input-large {
+    font-size: 1.2rem;
+    padding: 1rem 1.2rem;
+  }
+
+  .scan-btn-large {
+    font-size: 1rem;
+    padding: 1rem;
+  }
+}
+
+/* Simplified Result Display - No Scroll Needed */
+.result-section-simple {
+  max-width: 650px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: slideIn 0.4s ease;
+}
+
+.result-section-simple.success-state {
+  border-color: rgba(76, 175, 80, 0.5);
+  box-shadow: 0 0 30px rgba(76, 175, 80, 0.2);
+}
+
+.result-section-simple.already-checked {
+  border-color: rgba(255, 193, 7, 0.5);
+  box-shadow: 0 0 30px rgba(255, 193, 7, 0.2);
+}
+
+.result-section-simple.ready-state {
+  border-color: rgba(102, 126, 234, 0.5);
+  box-shadow: 0 0 30px rgba(102, 126, 234, 0.2);
+}
+
+/* Status Hero Section */
+.status-hero {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.status-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  animation: scaleIn 0.5s ease;
+}
+
+.status-icon.success {
+  background: linear-gradient(135deg, #4caf50, #66bb6a);
+  box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+}
+
+.status-icon.warning {
+  background: linear-gradient(135deg, #ff9800, #ffc107);
+  box-shadow: 0 8px 25px rgba(255, 152, 0, 0.4);
+}
+
+.status-icon.ready {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.status-icon.error {
+  background: linear-gradient(135deg, #f44336, #e91e63);
+  box-shadow: 0 8px 25px rgba(244, 67, 54, 0.4);
+}
+
+.status-title {
+  font-size: 1.8rem;
+  margin: 0 0 0.5rem 0;
+  font-weight: 700;
+  background: linear-gradient(135deg, #fff, rgba(255, 255, 255, 0.8));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.status-time {
+  font-size: 0.95rem;
+  opacity: 0.7;
+  margin: 0;
+}
+
+/* Guest Information - Clean Layout */
+.guest-info-simple {
+  margin-bottom: 1.5rem;
+}
+
+.guest-main {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1.2rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.guest-name {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+.guest-id {
+  font-size: 1rem;
+  font-family: 'Courier New', monospace;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 1px;
+}
+
+.guest-details-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.detail-chip {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.8rem 1.2rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  justify-content: center;
+}
+
+.detail-chip.highlight {
+  background: rgba(102, 126, 234, 0.2);
+  border: 2px solid rgba(102, 126, 234, 0.4);
+}
+
+.chip-label {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.chip-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.chip-value-large {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #667eea;
+}
+
+/* Additional Members - Simple */
+.members-simple {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.members-title {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.members-names {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.member-name {
+  font-weight: 600;
+}
+
+/* Action Buttons - Large and Clear */
+.actions-simple {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.btn-check-in {
+  width: 100%;
+  padding: 1.2rem;
+  background: linear-gradient(135deg, #4caf50, #66bb6a);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-check-in:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.5);
+}
+
+.btn-check-in:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-next-scan {
+  width: 100%;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-next-scan:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Mobile Responsive for Result Section */
+@media (max-width: 768px) {
+  .result-section-simple {
+    padding: 1.5rem;
+  }
+
+  .status-icon {
+    width: 70px;
+    height: 70px;
+    font-size: 2.5rem;
+  }
+
+  .status-title {
+    font-size: 1.5rem;
+  }
+
+  .guest-name {
+    font-size: 1.4rem;
+  }
+
+  .guest-details-row {
+    flex-direction: column;
+  }
+
+  .chip-value-large {
+    font-size: 1.5rem;
+  }
+
+  .btn-check-in {
+    font-size: 1.1rem;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .result-section-simple {
+    padding: 1.2rem;
+  }
+
+  .status-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+  }
+
+  .status-title {
+    font-size: 1.3rem;
+  }
+
+  .guest-name {
+    font-size: 1.2rem;
+  }
+
+  .chip-value-large {
+    font-size: 1.3rem;
+  }
+}
+
+

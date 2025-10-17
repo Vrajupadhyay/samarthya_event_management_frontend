@@ -219,6 +219,30 @@ export const adminAPI = {
     }
   },
 
+  updateRegistration: async (id, updates) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/registrations/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeaders(),
+        },
+        credentials: 'include',
+        body: JSON.stringify(updates),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to update registration');
+      }
+      
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   deleteRegistration: async (id) => {
     try {
       const response = await fetch(`${API_BASE_URL}/admin/registrations/${id}`, {
