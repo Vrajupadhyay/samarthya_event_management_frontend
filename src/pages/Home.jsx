@@ -81,7 +81,10 @@ const Home = () => {
       {/* Event Details Section */}
       <section className="details-section">
         <div className="container">
-          <h2 className="section-title">Event Details</h2>
+          <div className="section-header">
+            <h2 className="section-title">Event Details</h2>
+            <p className="section-subtitle">Everything you need to know about the biggest party of the year</p>
+          </div>
           <div className="details-grid">
             <div className="detail-card">
               <div className="detail-icon">📅</div>
@@ -96,10 +99,37 @@ const Home = () => {
               <p className="detail-highlight">City</p>
             </div>
             <div className="detail-card">
-              <div className="detail-icon">🎉</div>
-              <h3>Organized By</h3>
-              <p>XYZ Event Management</p>
-              <p className="detail-highlight">Premium Experience</p>
+              <div className="detail-icon">�</div>
+              <h3>Dress Code</h3>
+              <p>Smart Casual</p>
+              <p className="detail-highlight">Party Ready</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Organized By Section */}
+      <section className="organizers-section">
+        <div className="container">
+          <h2 className="section-title">Organized By</h2>
+          <div className="organizers-grid">
+            <div className="organizer-card">
+              <div className="organizer-logo">
+                <div className="logo-circle">
+                  🎯
+                </div>
+              </div>
+              <h3>IEEE BVM Student Branch</h3>
+              <p>Leading technical organization fostering innovation and excellence</p>
+            </div>
+            <div className="organizer-card">
+              <div className="organizer-logo">
+                <center>
+                  <img src="https://samarthyaevents.com/assets/logo-ZtLsZ4rm.jpeg" alt="Samarthya Events Logo" width={150}/>
+                </center>
+              </div>
+              <h3>Samarthya Events</h3>
+              <p>Premier institution nurturing future engineers and leaders</p>
             </div>
           </div>
         </div>
@@ -147,40 +177,88 @@ const Home = () => {
       {/* Pricing Section */}
       <section className="pricing-section">
         <div className="container">
-          <h2 className="section-title">Ticket Pricing</h2>
+          <div className="section-header">
+            <h2 className="section-title">Ticket Pricing</h2>
+            <p className="section-subtitle">Choose the perfect pass for your celebration</p>
+          </div>
           <div className="pricing-grid">
             <div className="price-card">
-              <div className="price-badge">Popular</div>
-              <div className="price-icon">💑</div>
-              <h3>Couple Pass</h3>
-              <div className="price">
+              <div className="price-header">
+                <div className="price-badge popular">Popular Choice</div>
+                <div className="price-icon">💑</div>
+                <h3>Couple Pass</h3>
+                <p className="price-description">Perfect for couples looking to celebrate together</p>
+              </div>
+              <div className="price-amount">
                 <span className="currency">₹</span>
                 <span className="amount">2,000</span>
+                <span className="per-person">₹1,000 per person</span>
               </div>
-              <p className="price-description">Perfect for couples</p>
-              <ul className="price-features">
-                <li>✓ Entry for 2 persons</li>
-                <li>✓ Dinner included</li>
-                <li>✓ Unlimited beverages</li>
-                <li>✓ Access to all facilities</li>
-              </ul>
+              <div className="price-features">
+                <div className="feature-item">
+                  <span className="feature-icon">✓</span>
+                  <span>Entry for 2 persons</span>
+                </div>
+                <div className="feature-item">
+                  <span className="feature-icon">✓</span>
+                  <span>Unlimited dinner buffet</span>
+                </div>
+                <div className="feature-item">
+                  <span className="feature-icon">✓</span>
+                  <span>Welcome drinks included</span>
+                </div>
+                <div className="feature-item">
+                  <span className="feature-icon">✓</span>
+                  <span>Access to all facilities</span>
+                </div>
+                <div className="feature-item">
+                  <span className="feature-icon">✓</span>
+                  <span>DJ & live entertainment</span>
+                </div>
+              </div>
             </div>
             <div className="price-card featured">
-              <div className="price-badge">Best Value</div>
-              <div className="price-icon">👨‍👩‍👧‍👦</div>
-              <h3>Family Pass</h3>
-              <div className="price">
+              <div className="price-header">
+                <div className="price-badge best-value">Best Value</div>
+                <div className="price-icon">👨‍👩‍👧‍👦</div>
+                <h3>Family Pass</h3>
+                <p className="price-description">Bring your whole family for an unforgettable night</p>
+              </div>
+              <div className="price-amount">
                 <span className="currency">₹</span>
                 <span className="amount">4,000</span>
+                <span className="per-person">Flexible members</span>
               </div>
-              <p className="price-description">Bring your whole family</p>
-              <ul className="price-features">
-                <li>✓ Entry for multiple persons</li>
-                <li>✓ Dinner included for all</li>
-                <li>✓ Unlimited beverages</li>
-                <li>✓ Access to all facilities</li>
-                <li>✓ Special family zone</li>
-              </ul>
+              <div className="price-features">
+                <div className="feature-item">
+                  <span className="feature-icon">✓</span>
+                  <span>Entry for multiple persons</span>
+                </div>
+                <div className="feature-item">
+                  <span className="feature-icon">✓</span>
+                  <span>Unlimited dinner for all</span>
+                </div>
+                <div className="feature-item">
+                  <span className="feature-icon">✓</span>
+                  <span>Welcome drinks for adults</span>
+                </div>
+                <div className="feature-item">
+                  <span className="feature-icon">✓</span>
+                  <span>Access to all facilities</span>
+                </div>
+                <div className="feature-item">
+                  <span className="feature-icon">✓</span>
+                  <span>DJ & live entertainment</span>
+                </div>
+                <div className="feature-item highlight">
+                  <span className="feature-icon">✓</span>
+                  <span>Special family zone</span>
+                </div>
+                <div className="feature-item highlight">
+                  <span className="feature-icon">✓</span>
+                  <span>Kids activity area</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
