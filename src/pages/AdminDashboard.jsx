@@ -19,10 +19,24 @@ const AdminDashboard = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editData, setEditData] = useState(null);
   const [activeTab, setActiveTab] = useState('details');
+  const [showWhatsAppDropdown, setShowWhatsAppDropdown] = useState(false);
+  const [statusUpdating, setStatusUpdating] = useState(false);
 
   useEffect(() => {
     fetchData();
   }, [filters]);
+
+  // Close WhatsApp dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showWhatsAppDropdown && !event.target.closest('.whatsapp-dropdown-wrapper')) {
+        setShowWhatsAppDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showWhatsAppDropdown]);
 
   const fetchData = async () => {
     try {
@@ -119,15 +133,20 @@ const AdminDashboard = () => {
   const handleStatusUpdate = async (status) => {
     if (!selectedRegistration) return;
     
-    const notes = prompt(`Add notes for ${status} (optional):`);
-    
+    setStatusUpdating(true);
     try {
-      await adminAPI.updateStatus(selectedRegistration._id, status, notes || '');
-      alert(`Registration ${status.toLowerCase()} successfully!`);
+      const response = await adminAPI.updateStatus(selectedRegistration._id, status, '');
+      
+      // Show success message with email status
+      const emailStatus = response.emailSent ? '📧 Email sent successfully!' : '⚠️ Email sending failed';
+      alert(`✅ Registration ${status.toLowerCase()} successfully!\n\n${emailStatus}`);
+      
       setShowModal(false);
       fetchData();
     } catch (error) {
-      alert(error.message);
+      alert(`❌ Error: ${error.message}`);
+    } finally {
+      setStatusUpdating(false);
     }
   };
 
@@ -160,6 +179,54 @@ const AdminDashboard = () => {
     } catch (error) {
       alert(error.message);
     }
+  };
+
+  // WhatsApp messaging helper functions
+  const generateWhatsAppMessage = (registration, template) => {
+    const { firstName, lastName, assignedTicketId, ticketId, type, amount, status } = registration;
+    const fullName = `${firstName || ''} ${lastName || ''}`.trim() || 'Guest';
+    const ticketDisplay = assignedTicketId || ticketId || 'N/A';
+    const amountDisplay = amount || 'N/A';
+    const typeDisplay = type || 'N/A';
+    const statusDisplay = status || 'Pending';
+    
+    switch(template) {
+      case 'confirmation':
+        return `*Registration Confirmation*\n\nHello ${fullName}!\n\nYour registration has been received:\n\nType: ${typeDisplay}\nTicket ID: ${ticketDisplay}\nAmount: Rs.${amountDisplay}\nStatus: ${statusDisplay}\n\nThank you for registering!`;
+      
+      case 'approved':
+        return `*Registration Approved*\n\nHello ${fullName}!\n\nGreat news! Your registration has been approved.\n\nTicket ID: ${ticketDisplay}\nAmount: Rs.${amountDisplay}\n\nWe look forward to seeing you at the event!`;
+      
+      case 'reminder':
+        return `*Event Reminder*\n\nHello ${fullName}!\n\nThis is a reminder about your upcoming event:\n\nYour Ticket ID: ${ticketDisplay}\nType: ${typeDisplay}\n\nPlease bring your ticket to the venue. See you soon!`;
+      
+      case 'custom':
+        return `Hello ${fullName}!\n\nTicket ID: ${ticketDisplay}\n\n`;
+      
+      default:
+        return `Hello ${fullName}!\n\nTicket ID: ${ticketDisplay}`;
+    }
+  };
+
+  const handleSendWhatsAppTemplate = (registration, template) => {
+    // Check if mobile number exists
+    if (!registration.mobile) {
+      alert('No phone number available for this registration');
+      return;
+    }
+
+    const message = generateWhatsAppMessage(registration, template);
+    // Format phone number for WhatsApp (add country code if needed)
+    let phoneNumber = registration.mobile.replace(/\D/g, '');
+    
+    // Add India country code if not present
+    if (!phoneNumber.startsWith('91') && phoneNumber.length === 10) {
+      phoneNumber = '91' + phoneNumber;
+    }
+    
+    // Open WhatsApp with pre-filled message
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
   };
 
   if (loading) {
@@ -297,7 +364,7 @@ const AdminDashboard = () => {
           <table className="registrations-table">
             <thead>
               <tr>
-                <th>ID</th>
+                <th>Ticket ID</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
@@ -313,7 +380,7 @@ const AdminDashboard = () => {
             <tbody>
               {registrations.map((reg) => (
                 <tr key={reg._id}>
-                  <td><span className="table-id">{reg.registrationId}</span></td>
+                  <td><span className="table-id">{reg.assignedTicketId || reg.ticketId}</span></td>
                   <td>{reg.firstName} {reg.lastName}</td>
                   <td>{reg.email}</td>
                   <td>{reg.mobile}</td>
@@ -377,8 +444,8 @@ const AdminDashboard = () => {
                 <div className="tab-content">
                   <div className="detail-grid">
                     <div className="detail-item">
-                      <span className="detail-label">Registration ID</span>
-                      <span className="detail-value">{selectedRegistration.registrationId}</span>
+                      <span className="detail-label">Ticket ID</span>
+                      <span className="detail-value">{selectedRegistration.assignedTicketId || selectedRegistration.ticketId}</span>
                     </div>
                     <div className="detail-item">
                       <span className="detail-label">Name</span>
@@ -468,25 +535,101 @@ const AdminDashboard = () => {
               {activeTab === 'qr' && (
                 <div className="tab-content qr-tab">
                   <div className="qr-container-modal">
-                    <img src={selectedRegistration.qrCode} alt="QR Code" className="qr-image" />
-                    <p className="qr-id">{selectedRegistration.registrationId}</p>
+                    <img src={selectedRegistration.qrCodeDataURL || selectedRegistration.qrCode} alt="QR Code" className="qr-image" />
+                    <p className="qr-id">{selectedRegistration.assignedTicketId || selectedRegistration.ticketId}</p>
                   </div>
                 </div>
               )}
             </div>
 
             <div className="modal-footer">
+              {/* WhatsApp Dropdown */}
+              <div className="whatsapp-dropdown-wrapper">
+                <button 
+                  onClick={() => setShowWhatsAppDropdown(!showWhatsAppDropdown)}
+                  className="btn-whatsapp"
+                >
+                  💬 Send WhatsApp
+                </button>
+                {showWhatsAppDropdown && (
+                  <div className="whatsapp-dropdown-menu">
+                    <button 
+                      onClick={() => {
+                        handleSendWhatsAppTemplate(selectedRegistration, 'confirmation');
+                        setShowWhatsAppDropdown(false);
+                      }}
+                      className="dropdown-item"
+                    >
+                      Confirmation Message
+                    </button>
+                    <button 
+                      onClick={() => {
+                        handleSendWhatsAppTemplate(selectedRegistration, 'approved');
+                        setShowWhatsAppDropdown(false);
+                      }}
+                      className="dropdown-item"
+                    >
+                      Approval Message
+                    </button>
+                    <button 
+                      onClick={() => {
+                        handleSendWhatsAppTemplate(selectedRegistration, 'reminder');
+                        setShowWhatsAppDropdown(false);
+                      }}
+                      className="dropdown-item"
+                    >
+                      Event Reminder
+                    </button>
+                    <button 
+                      onClick={() => {
+                        handleSendWhatsAppTemplate(selectedRegistration, 'custom');
+                        setShowWhatsAppDropdown(false);
+                      }}
+                      className="dropdown-item"
+                    >
+                      Custom Message
+                    </button>
+                  </div>
+                )}
+              </div>
+
               {selectedRegistration.status === 'Pending' && (
                 <>
-                  <button onClick={() => handleStatusUpdate('Accepted')} className="btn-success">
-                    ✅ Accept
+                  <button 
+                    onClick={() => handleStatusUpdate('Accepted')} 
+                    className="btn-success"
+                    disabled={statusUpdating}
+                  >
+                    {statusUpdating ? (
+                      <>
+                        <span className="spinner-small"></span>
+                        Accepting & Sending Email...
+                      </>
+                    ) : (
+                      '✅ Accept'
+                    )}
                   </button>
-                  <button onClick={() => handleStatusUpdate('Rejected')} className="btn-warning">
-                    ❌ Reject
+                  <button 
+                    onClick={() => handleStatusUpdate('Rejected')} 
+                    className="btn-warning"
+                    disabled={statusUpdating}
+                  >
+                    {statusUpdating ? (
+                      <>
+                        <span className="spinner-small"></span>
+                        Rejecting & Sending Email...
+                      </>
+                    ) : (
+                      '❌ Reject'
+                    )}
                   </button>
                 </>
               )}
-              <button onClick={handleDelete} className="btn-danger">
+              <button 
+                onClick={handleDelete} 
+                className="btn-danger"
+                disabled={statusUpdating}
+              >
                 🗑️ Delete
               </button>
             </div>

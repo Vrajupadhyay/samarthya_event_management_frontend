@@ -183,17 +183,22 @@
   letter-spacing: 0.5px;
 }
 
+
 .form-group input,
-.form-group select {
-  padding: 0.85rem;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
+.form-group select,
+.form-group textarea {
+  padding: 0.95rem 1.1rem;
+  background: rgba(255, 255, 255, 0.13);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
   border-radius: 10px;
-  color: #fff;
-  font-size: 0.95rem;
+  /* color: #ffffff !important; */
+  font-size: 1.05rem;
+  font-family: inherit;
   transition: all 0.3s ease;
   -webkit-appearance: none;
   appearance: none;
+  box-shadow: none;
+  /* -webkit-text-fill-color: #ffffff !important; */
 }
 
 .form-group select {
@@ -203,16 +208,130 @@
   padding-right: 2.5rem;
 }
 
+
 .form-group input:focus,
-.form-group select:focus {
+.form-group select:focus,
+.form-group textarea:focus {
   outline: none;
   border-color: #ffd700;
-  background: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.13);
 }
 
-.form-group input::placeholder {
+/* Ticket Status Styles */
+.form-group input.input-success {
+  border-color: #4caf50;
+}
+
+.form-group input.input-error {
+  border-color: #f44336;
+}
+
+.ticket-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  margin-top: 0.5rem;
+}
+
+.ticket-status.checking {
+  background: rgba(255, 215, 0, 0.15);
+  color: #ffd700;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.ticket-status.available {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4caf50;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.ticket-status.unavailable {
+  background: rgba(244, 67, 54, 0.15);
+  color: #f44336;
+  border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+.form-hint {
+  display: block;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+  margin-top: 0.4rem;
+  font-style: italic;
+}
+
+/* Ticket Input with BB_ Prefix */
+.ticket-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.13);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  padding: 0.95rem 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.ticket-input-wrapper:focus-within {
+  border-color: #ffd700;
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.13);
+}
+
+.ticket-prefix {
+  color: #ffd700;
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-right: 0.3rem;
+  flex-shrink: 0;
+}
+
+.ticket-input {
+  flex: 1;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  color: #ffffff !important;
+  font-size: 1.05rem;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.ticket-input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.ticket-preview {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.8rem;
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+}
+
+.ticket-preview strong {
+  color: #ffd700;
+  font-weight: 700;
+}
+
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  opacity: 1;
+}
+
+.ticket-input::placeholder {
   color: rgba(255, 255, 255, 0.4);
+  opacity: 1;
 }
 
 .section-header {
@@ -594,7 +713,7 @@
   }
 
   .type-selector {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
   }
 
@@ -691,55 +810,51 @@
   input[type="text"],
   input[type="email"],
   input[type="tel"],
-  select {
+  select,
+  textarea {
     font-size: 16px !important;
   }
-  
   .partner-badge {
     width: 100%;
     justify-content: center;
   }
-  
   .section-note {
     font-size: 0.8rem;
     padding: 0.5rem 0.8rem;
   }
-  
   .partner-section {
     padding: 1rem;
   }
-  
   .member-row-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.8rem;
   }
-  
   .remove-member-btn {
     width: 100%;
     justify-content: center;
     font-size: 0.9rem;
     padding: 0.6rem 1rem;
   }
-  
   .add-member-btn {
     width: 100%;
     justify-content: center;
   }
-  
   .section-header {
     flex-direction: column;
     align-items: stretch;
     gap: 1rem;
   }
-  
   .section-header h3 {
     min-width: auto;
   }
-  
   .info-banner {
     font-size: 0.85rem;
     padding: 0.6rem 0.8rem;
+  }
+  .type-selector {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
   }
 }
 

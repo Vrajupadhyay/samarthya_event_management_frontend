@@ -5,7 +5,7 @@ import QRCode from 'qrcode';
 import './Success.css';
 
 const Success = () => {
-  const { registrationId } = useParams();
+  const { registrationId } = useParams(); // This is actually ticketId now
   const navigate = useNavigate();
   const [registration, setRegistration] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -22,8 +22,12 @@ const Success = () => {
       if (response.success) {
         setRegistration(response.data);
         
-        if (response.data.status === 'Accepted' && response.data.registrationId) {
-          generateBlueQRCode(response.data.registrationId);
+        // Use the QR code from database (already generated during ticket creation)
+        if (response.data.qrCodeDataURL) {
+          setQrCodeUrl(response.data.qrCodeDataURL);
+        } else if (response.data.status === 'Accepted' && response.data.assignedTicketId) {
+          // Fallback: generate if not present
+          generateBlueQRCode(response.data.assignedTicketId);
         }
       } else {
         setError('Registration not found');
@@ -35,9 +39,9 @@ const Success = () => {
     }
   };
 
-  const generateBlueQRCode = async (regId) => {
+  const generateBlueQRCode = async (ticketId) => {
     try {
-      const qrUrl = await QRCode.toDataURL(regId, {
+      const qrUrl = await QRCode.toDataURL(ticketId, {
         width: 400,
         margin: 2,
         color: {
@@ -57,7 +61,7 @@ const Success = () => {
     
     const link = document.createElement('a');
     link.href = qrCodeUrl;
-    link.download = `QR-${registration.registrationId}.png`;
+    link.download = `QR-${registration.assignedTicketId || registration.ticketId}.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -130,8 +134,8 @@ const Success = () => {
               
               <div className="info-grid">
                 <div className="info-item">
-                  <span className="info-label">Registration ID</span>
-                  <span className="info-value id-value">{registration.registrationId}</span>
+                  <span className="info-label">Ticket ID</span>
+                  <span className="info-value id-value">{registration.assignedTicketId || registration.ticketId}</span>
                 </div>
                 
                 <div className="info-item">
@@ -210,67 +214,6 @@ const Success = () => {
                     </div>
                   ))}
                 </div>
-              )}
-            </div>
-
-            <div className="qr-section">
-              {isPending && (
-                <div className="verification-pending">
-                  <div className="lock-icon">🔒</div>
-                  <h3>Verification Pending</h3>
-                  <p>Your registration is under review by our admin team.</p>
-                  <div className="pending-note">
-                    <span className="icon">⏳</span>
-                    <span>QR code will be available after verification</span>
-                  </div>
-                  <div className="reload-hint">
-                    <span className="icon">🔄</span>
-                    <span>Refresh this page after admin approval</span>
-                  </div>
-                </div>
-              )}
-
-              {isRejected && (
-                <div className="verification-rejected">
-                  <div className="reject-icon">❌</div>
-                  <h3>Registration Rejected</h3>
-                  <p>Unfortunately, your registration could not be approved.</p>
-                  {registration.notes && (
-                    <div className="reject-reason">
-                      <strong>Reason:</strong>
-                      <p>{registration.notes}</p>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {isVerified && (
-                <>
-                  <h3 className="section-title qr-title">
-                    <span className="lock-icon-small">🔓</span>
-                    Entry Pass
-                  </h3>
-                  <div className="qr-code-box">
-                    <div className="qr-lock-overlay">
-                      <div className="lock-icon-large">🔒</div>
-                    </div>
-                    {qrCodeUrl ? (
-                      <img src={qrCodeUrl} alt="QR Code" className="qr-code-img" />
-                    ) : (
-                      <div className="qr-loading">Generating QR Code...</div>
-                    )}
-                  </div>
-                  <div className="qr-status-badge verified">
-                    ✓ Verified & Active
-                  </div>
-                  <p className="qr-instructions">
-                    Show this QR code at the entry for quick check-in
-                  </p>
-                  <button onClick={downloadQRCode} className="download-qr-btn" disabled={!qrCodeUrl}>
-                    <span className="btn-icon">⬇️</span>
-                    Download QR Code
-                  </button>
-                </>
               )}
             </div>
           </div>

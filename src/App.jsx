@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import Home from './pages/Home';
 import Register from './pages/Register';
 import Success from './pages/Success';
+import Pass from './pages/Pass';
+import Verify from './pages/Verify';
 import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDashboard';
 import Scanner from './pages/Scanner';
@@ -50,6 +52,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/success/:registrationId" element={<Success />} />
+        <Route path="/pass/:registrationId" element={<Pass />} />
+        <Route path="/verify" element={<Verify />} />
         <Route path="/login" element={<Login />} />
         
         {/* Admin Routes */}

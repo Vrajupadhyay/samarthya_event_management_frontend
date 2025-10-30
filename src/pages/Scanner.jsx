@@ -103,17 +103,18 @@ const Scanner = () => {
 
   const handleManualScan = async (e) => {
     e.preventDefault();
-    if (!manualInput.trim()) return;
+    if (!manualInput.trim() || manualInput.length !== 4) return;
 
-    const registrationId = manualInput.trim();
+    // Add BB_ prefix to the 4-digit number
+    const ticketId = `BB_${manualInput.trim()}`;
 
     setLoading(true);
     setError('');
     setScanResult(null);
 
     try {
-      // Fetch registration details without marking attendance
-      const response = await scanAPI.getDetails(registrationId);
+      // Fetch registration details without marking attendance using ticket ID
+      const response = await scanAPI.getDetails(ticketId);
       setScanResult(response);
       setManualInput('');
     } catch (err) {
@@ -130,7 +131,9 @@ const Scanner = () => {
     setError('');
 
     try {
-      const response = await scanAPI.markAttendance(scanResult.data.registrationId);
+      // Use ticket ID to mark attendance
+      const ticketId = scanResult.data.assignedTicketId || scanResult.data.ticketId;
+      const response = await scanAPI.markAttendance(ticketId);
       
       // Update scan result with the new data from response
       setScanResult({
@@ -197,27 +200,36 @@ const Scanner = () => {
             ) : (
               <div className="manual-input-section">
                 <div className="scanner-header-simple">
-                  <h2>⌨️ Enter Registration ID</h2>
+                  <h2>⌨️ Enter Ticket ID</h2>
                   <p className="camera-instructions-simple">
-                    Type the registration ID from the ticket
+                    Enter the 4-digit number (e.g., 0001)
                   </p>
                 </div>
 
                 <form onSubmit={handleManualScan} className="manual-input-form-simple">
                   <div className="input-group-simple">
-                    <input
-                      type="text"
-                      value={manualInput}
-                      onChange={(e) => setManualInput(e.target.value.toUpperCase())}
-                      placeholder="DJ2025-0001"
-                      className="scan-input-large"
-                      autoFocus
-                      disabled={loading}
-                    />
+                    <div className="prefix-input-wrapper">
+                      <span className="input-prefix">BB_</span>
+                      <input
+                        type="text"
+                        value={manualInput}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\D/g, '');
+                          if (value.length <= 4) {
+                            setManualInput(value);
+                          }
+                        }}
+                        placeholder="0001"
+                        className="scan-input-large with-prefix"
+                        maxLength={4}
+                        autoFocus
+                        disabled={loading}
+                      />
+                    </div>
                     <button 
                       type="submit" 
                       className="scan-btn-large"
-                      disabled={loading || !manualInput.trim()}
+                      disabled={loading || manualInput.length !== 4}
                     >
                       {loading ? '⏳ Verifying...' : '✓ Verify'}
                     </button>
@@ -289,7 +301,7 @@ const Scanner = () => {
             <div className="guest-info-simple">
               <div className="guest-main">
                 <div className="guest-name">{scanResult.data.name}</div>
-                <div className="guest-id">{scanResult.data.registrationId}</div>
+                <div className="guest-id">{scanResult.data.assignedTicketId || scanResult.data.ticketId}</div>
               </div>
               
               <div className="guest-details-row">

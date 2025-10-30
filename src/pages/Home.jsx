@@ -96,7 +96,7 @@ const Home = () => {
               </div>
               <h3>7 Sports Academy</h3>
               <p>Leading sports and fitness excellence center</p>
-              <div className="organizer-badge">Co-Organizer</div>
+              <div className="organizer-badge">Organizer</div>
             </div>
             <div className="organizer-card-modern">
               <div className="organizer-logo-wrapper">
@@ -108,7 +108,7 @@ const Home = () => {
               </div>
               <h3>Samarthya Events</h3>
               <p>Premier event management and entertainment</p>
-              <div className="organizer-badge">Co-Organizer</div>
+              <div className="organizer-badge">Organizer</div>
             </div>
           </div>
         </div>
@@ -169,11 +169,6 @@ const Home = () => {
               <p>Delicious dinner buffet with multiple cuisines</p>
             </div>
             <div className="facility-card-modern">
-              <div className="facility-icon-large">🎯</div>
-              <h3>Fun & Games</h3>
-              <p>Exciting games and activities throughout the night</p>
-            </div>
-            <div className="facility-card-modern">
               <div className="facility-icon-large">🎆</div>
               <h3>Fireworks</h3>
               <p>Spectacular fireworks display at midnight</p>
@@ -182,11 +177,6 @@ const Home = () => {
               <div className="facility-icon-large">📸</div>
               <h3>Photo Booth</h3>
               <p>Capture memories at our themed photo booth</p>
-            </div>
-            <div className="facility-card-modern">
-              <div className="facility-icon-large">🎁</div>
-              <h3>Prizes & Giveaways</h3>
-              <p>Win exciting prizes throughout the event</p>
             </div>
           </div>
         </div>
@@ -199,143 +189,90 @@ const Home = () => {
             <h2 className="section-title">Ticket Pricing</h2>
             <p className="section-subtitle">Choose the perfect pass for your celebration</p>
           </div>
-          <div className="pricing-grid-modern">
+          <div className="pricing-grid-modern three-cards">
+            {/* Individual Pass */}
             <div className="price-card-modern">
+              <div className="price-icon-wrapper">
+                {/* <div className="price-icon">🎫</div> */}
+              </div>
+              <h3 className="price-title">Individual</h3>
+              <div className="price-amount-wrapper">
+                <span className="price-currency">₹</span>
+                <span className="price-amount">1,100</span>
+              </div>
+              <p className="price-per-person">Solo Entry</p>
+            </div>
+
+            {/* Couple Pass */}
+            <div className="price-card-modern popular">
               <div className="price-ribbon">Popular</div>
               <div className="price-icon-wrapper">
-                <div className="price-icon">💑</div>
+                {/* <div className="price-icon">💑</div> */}
               </div>
-              <h3 className="price-title">Couple Pass</h3>
-              <p className="price-description">Perfect for couples looking to celebrate together</p>
-              
+              <h3 className="price-title">Couple</h3>
               <div className="price-amount-wrapper">
                 <span className="price-currency">₹</span>
                 <span className="price-amount">2,000</span>
               </div>
               <p className="price-per-person">₹1,000 per person</p>
-              
-              <div className="price-divider"></div>
-              
-              <ul className="price-features-list">
-                <li><span className="check-icon">✓</span> Entry for 2 persons</li>
-                <li><span className="check-icon">✓</span> Unlimited dinner buffet</li>
-                <li><span className="check-icon">✓</span> Welcome drinks included</li>
-                <li><span className="check-icon">✓</span> Access to all facilities</li>
-                <li><span className="check-icon">✓</span> DJ & live entertainment</li>
-                <li><span className="check-icon">✓</span> Photo booth access</li>
-              </ul>
             </div>
 
+            {/* Family Pass */}
             <div className="price-card-modern featured">
               <div className="price-ribbon best">Best Value</div>
               <div className="price-icon-wrapper">
-                <div className="price-icon">👨‍👩‍👧‍👦</div>
+                {/* <div className="price-icon">👨‍👩‍👧‍👦</div> */}
               </div>
-              <h3 className="price-title">Family Pass</h3>
-              <p className="price-description">Bring your whole family for an unforgettable night</p>
-              
+              <h3 className="price-title">Family</h3>
               <div className="price-amount-wrapper">
                 <span className="price-currency">₹</span>
                 <span className="price-amount">4,000</span>
               </div>
-              <p className="price-per-person">Flexible members</p>
-              
-              <div className="price-divider"></div>
-              
-              <ul className="price-features-list">
-                <li><span className="check-icon">✓</span> Entry for multiple persons</li>
-                <li><span className="check-icon">✓</span> Unlimited dinner for all</li>
-                <li><span className="check-icon">✓</span> Welcome drinks for adults</li>
-                <li><span className="check-icon">✓</span> Access to all facilities</li>
-                <li><span className="check-icon">✓</span> DJ & live entertainment</li>
-                <li><span className="check-icon">✓</span> Photo booth access</li>
-                <li><span className="check-icon highlighted">✓</span> Special family zone</li>
-                <li><span className="check-icon highlighted">✓</span> Kids activity area</li>
-              </ul>
+              <p className="price-per-person">3+ members</p>
             </div>
+          </div>
+
+          {/* Benefits Section - Shown Once Below All Tickets */}
+          <div className="benefits-section-unified">
+            <h3 className="benefits-title">What's Included in All Tickets</h3>
+            <ul className="benefits-list-unified">
+              <li><span className="check-icon">✓</span> Entry for specified person(s)</li>
+              <li><span className="check-icon">✓</span> Unlimited dinner buffet</li>
+              <li><span className="check-icon">✓</span> Welcome drinks</li>
+              <li><span className="check-icon">✓</span> DJ & live entertainment</li>
+              <li><span className="check-icon">✓</span> Photo booth access</li>
+            </ul>
           </div>
         </div>
       </section>
 
-      {/* Terms & Conditions Section */}
+      {/* Terms & Conditions Section - Simplified Single Card */}
       <section className="terms-section">
         <div className="container">
           <div className="section-header">
             <h2 className="section-title">Terms & Conditions</h2>
             <p className="section-subtitle">Please read carefully before registering</p>
           </div>
-          <div className="terms-content">
-            <div className="terms-card">
-              <div className="terms-icon">📋</div>
-              <h3>Registration</h3>
-              <ul>
-                <li>All registrations are subject to availability</li>
+          <div className="terms-content-simple">
+            <div className="terms-card-unified">
+              <ul className="terms-list-simple">
                 <li>Registration confirmation will be sent via email with QR code</li>
-                <li>One QR code per registration (Couple/Family)</li>
-                <li>QR code is mandatory for entry - digital or printed</li>
-              </ul>
-            </div>
-
-            <div className="terms-card">
-              <div className="terms-icon">💳</div>
-              <h3>Payment</h3>
-              <ul>
-                <li>Payment can be made via Cash or Online mode</li>
-                <li>Full payment required to confirm registration</li>
-                <li>Payment receipts will be provided upon request</li>
-                <li>Prices are inclusive of all taxes</li>
-              </ul>
-            </div>
-
-            <div className="terms-card">
-              <div className="terms-icon">🚫</div>
-              <h3>Cancellation & Refund</h3>
-              <ul>
-                <li>Registration once confirmed is non-refundable</li>
-                <li>No cancellations accepted after payment</li>
-                <li>Tickets are non-transferable</li>
-                <li>Organizers reserve the right to cancel the event due to unforeseen circumstances</li>
-              </ul>
-            </div>
-
-            <div className="terms-card">
-              <div className="terms-icon">⚠️</div>
-              <h3>Event Rules</h3>
-              <ul>
+                <li>QR code is mandatory for entry (digital or printed)</li>
                 <li>Entry only with valid QR code and ID proof</li>
-                <li>Dress code: Smart Casual - No shorts/slippers</li>
+                <li>Full payment required to confirm registration</li>
+                <li>Registration once confirmed is non-refundable</li>
+                <li>Tickets are non-transferable</li>
+                <li>Dress code: Smart Casual - No shorts/slippers allowed</li>
                 <li>Outside food and beverages strictly prohibited</li>
-                <li>Smoking only in designated areas</li>
-                <li>Management reserves the right to deny entry</li>
-              </ul>
-            </div>
-
-            <div className="terms-card">
-              <div className="terms-icon">📸</div>
-              <h3>Photography & Videography</h3>
-              <ul>
-                <li>Event photography/videography will be done by organizers</li>
-                <li>Photos may be used for promotional purposes</li>
-                <li>Personal cameras allowed for personal use only</li>
-                <li>Professional equipment requires prior permission</li>
-              </ul>
-            </div>
-
-            <div className="terms-card">
-              <div className="terms-icon">🔐</div>
-              <h3>Safety & Security</h3>
-              <ul>
                 <li>Security check mandatory at entry</li>
-                <li>Dangerous items/weapons strictly prohibited</li>
+                <li>Management reserves the right to deny entry</li>
                 <li>Organizers not responsible for lost belongings</li>
-                <li>Medical assistance available on-site</li>
-                <li>Any misconduct may result in immediate expulsion</li>
+                <li>Event photos may be used for promotional purposes</li>
               </ul>
+              <div className="terms-footer-note">
+                <p>By registering, you agree to abide by all terms and conditions. Organizers reserve the right to make changes without prior notice.</p>
+              </div>
             </div>
-          </div>
-
-          <div className="terms-footer">
-            <p><strong>Important:</strong> By registering for this event, you agree to abide by all the terms and conditions mentioned above. The organizers reserve the right to make changes to the terms and conditions without prior notice.</p>
           </div>
         </div>
       </section>
@@ -373,6 +310,7 @@ const Home = () => {
             <div className="footer-section">
               <h4>Quick Links</h4>
               <p><Link to="/register" style={{color: '#ffd700', textDecoration: 'none'}}>Register Now</Link></p>
+              <p><Link to="/verify" style={{color: '#ffd700', textDecoration: 'none'}}>Retrieve Your Pass</Link></p>
               <p><Link to="/scanner" style={{color: '#ffd700', textDecoration: 'none'}}>Scan QR Code</Link></p>
               <p><Link to="/login" style={{color: '#ffd700', textDecoration: 'none'}}>Admin Login</Link></p>
             </div>

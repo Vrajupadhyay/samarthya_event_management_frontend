@@ -1042,6 +1042,30 @@
   letter-spacing: 1px;
 }
 
+/* Prefix Input Wrapper */
+.prefix-input-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.input-prefix {
+  position: absolute;
+  left: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #667eea;
+  letter-spacing: 2px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.scan-input-large.with-prefix {
+  padding-left: 5rem;
+  text-align: left;
+}
+
 .scan-btn-large {
   width: 100%;
   padding: 1.2rem;

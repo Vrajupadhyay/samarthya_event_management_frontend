@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { registrationAPI } from '../services/api';
 import './Register.css';
@@ -7,9 +7,12 @@ const Register = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [ticketCheckLoading, setTicketCheckLoading] = useState(false);
+  const [ticketStatus, setTicketStatus] = useState(null);
   
   // Initialize with Couple type and 1 partner member by default
   const [formData, setFormData] = useState({
+    ticketId: '',
     type: 'Couple',
     firstName: '',
     lastName: '',
@@ -20,12 +23,52 @@ const Register = () => {
     additionalMembers: [{ firstName: '', lastName: '', gender: 'Male' }]
   });
 
+  // Check ticket availability when ticketId changes
+  useEffect(() => {
+    const checkTicket = async () => {
+      if (formData.ticketId && formData.ticketId.length >= 7) {
+        setTicketCheckLoading(true);
+        try {
+          const response = await fetch(`http://localhost:5000/api/register/tickets/check/${formData.ticketId}`);
+          const result = await response.json();
+          setTicketStatus(result);
+        } catch (err) {
+          console.error('Error checking ticket:', err);
+          setTicketStatus(null);
+        } finally {
+          setTicketCheckLoading(false);
+        }
+      } else {
+        setTicketStatus(null);
+      }
+    };
+
+    const debounceTimer = setTimeout(checkTicket, 500);
+    return () => clearTimeout(debounceTimer);
+  }, [formData.ticketId]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    
+    // Auto-format ticket ID: add BB_ prefix and keep only numbers
+    if (name === 'ticketId') {
+      // Remove any non-digit characters
+      const digitsOnly = value.replace(/\D/g, '');
+      // Limit to 4 digits
+      const limitedDigits = digitsOnly.slice(0, 4);
+      // Auto-add BB_ prefix
+      const formattedValue = limitedDigits ? `BB_${limitedDigits}` : '';
+      
+      setFormData(prev => ({
+        ...prev,
+        [name]: formattedValue
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
     setError('');
   };
 
@@ -33,9 +76,12 @@ const Register = () => {
     setFormData(prev => ({
       ...prev,
       type,
+      // For Individual: no additional members (total 1 person)
       // For Couple: automatically add 1 member (total 2 persons)
       // For Family: keep existing members or empty array
-      additionalMembers: type === 'Couple' 
+      additionalMembers: type === 'Individual' 
+        ? []
+        : type === 'Couple' 
         ? [{ firstName: '', lastName: '', gender: 'Male' }]
         : prev.additionalMembers
     }));
@@ -68,6 +114,11 @@ const Register = () => {
   };
 
   const validateForm = () => {
+    // Validate ticket ID
+    if (!formData.ticketId.trim()) return 'Ticket ID is required';
+    if (!/^BB_\d{4}$/.test(formData.ticketId)) return 'Invalid ticket ID format. Must be BB_XXXX (e.g., BB_0001)';
+    if (ticketStatus && !ticketStatus.available) return 'This ticket is not available';
+    
     if (!formData.firstName.trim()) return 'First name is required';
     if (!formData.lastName.trim()) return 'Last name is required';
     if (!formData.mobile.trim()) return 'Mobile number is required';
@@ -111,7 +162,7 @@ const Register = () => {
       const response = await registrationAPI.create(formData);
       
       if (response.success) {
-        navigate(`/success/${response.data.registrationId}`);
+        navigate(`/success/${response.data.assignedTicketId || response.data.ticketId}`);
       }
     } catch (err) {
       setError(err.message || 'Registration failed. Please try again.');
@@ -120,7 +171,7 @@ const Register = () => {
     }
   };
 
-  const amount = formData.type === 'Couple' ? 2000 : 4000;
+  const amount = formData.type === 'Individual' ? 1100 : (formData.type === 'Couple' ? 2000 : 4000);
 
   return (
     <div className="register-container">
@@ -132,10 +183,65 @@ const Register = () => {
 
       <div className="register-content">
         <form onSubmit={handleSubmit} className="register-form">
+          {/* Ticket ID Section */}
+          <div className="form-section">
+            <h3>🎫 Ticket Information</h3>
+            <div className="form-group">
+              <label>Ticket Number * (Just enter the 4 digits)</label>
+              <div className="ticket-input-wrapper">
+                <span className="ticket-prefix">BB_</span>
+                <input
+                  type="text"
+                  name="ticketId"
+                  value={formData.ticketId.replace('BB_', '')}
+                  onChange={handleChange}
+                  // placeholder="0001"
+                  maxLength={4}
+                  required
+                  className={`ticket-input ${ticketStatus ? (ticketStatus.available ? 'input-success' : 'input-error') : ''}`}
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                />
+              </div>
+              
+              {formData.ticketId && (
+                <div className="ticket-preview">
+                  Full Ticket ID: <strong>{formData.ticketId}</strong>
+                </div>
+              )}
+              
+              {ticketCheckLoading && (
+                <span className="ticket-status checking">
+                  🔄 Checking availability...
+                </span>
+              )}
+              
+              {ticketStatus && !ticketCheckLoading && (
+                <span className={`ticket-status ${ticketStatus.available ? 'available' : 'unavailable'}`}>
+                  {ticketStatus.available ? '✅ Available' : `❌ ${ticketStatus.message}`}
+                </span>
+              )}
+              
+              <small className="form-hint">
+                Enter only the 4-digit number (e.g., 0001, 0100, 1000)
+              </small>
+            </div>
+          </div>
+
           {/* Registration Type */}
           <div className="form-section">
             <h3>Select Registration Type</h3>
             <div className="type-selector">
+              <div
+                className={`type-option ${formData.type === 'Individual' ? 'active' : ''}`}
+                onClick={() => handleTypeChange('Individual')}
+              >
+                <div className="type-info">
+                  <h4>Individual</h4>
+                  <p className="type-desc">For 1 person</p>
+                </div>
+                <p className="type-price">₹1,100</p>
+              </div>
               <div
                 className={`type-option ${formData.type === 'Couple' ? 'active' : ''}`}
                 onClick={() => handleTypeChange('Couple')}
@@ -152,7 +258,7 @@ const Register = () => {
               >
                 <div className="type-info">
                   <h4>Family</h4>
-                  <p className="type-desc">For multiple persons</p>
+                  <p className="type-desc">For 3+ persons</p>
                 </div>
                 <p className="type-price">₹4,000</p>
               </div>

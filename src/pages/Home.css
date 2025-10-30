@@ -1283,6 +1283,12 @@
   margin: 0 auto;
 }
 
+.pricing-grid-modern.three-cards {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  max-width: 1200px;
+  gap: 2rem;
+}
+
 .price-card-modern {
   background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(20px);
@@ -1317,6 +1323,17 @@
   background: linear-gradient(90deg, #ffd700, #ffed4e);
   opacity: 1;
   height: 8px;
+}
+
+.price-card-modern.popular {
+  border-color: rgba(102, 126, 234, 0.5);
+  background: rgba(102, 126, 234, 0.06);
+}
+
+.price-card-modern.popular::before {
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  opacity: 1;
+  height: 7px;
 }
 
 .price-card-modern:hover {
@@ -1477,6 +1494,50 @@
   color: #ffd700;
 }
 
+/* Compact Features List for Three-Card Layout */
+.price-features-list.compact {
+  padding: 0 1.5rem 1.5rem;
+  gap: 0.7rem;
+}
+
+.price-features-list.compact li {
+  padding: 0.7rem;
+  font-size: 0.9rem;
+}
+
+/* Terms Section in Cards */
+.price-terms {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1.2rem 1.5rem;
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.terms-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffd700;
+  margin: 0 0 0.6rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.terms-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.terms-list li {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  padding-left: 0.3rem;
+}
+
 /* Terms & Conditions Section */
 .terms-section {
   padding: 5rem 0;
@@ -1600,6 +1661,133 @@
   font-weight: 800;
 }
 
+/* Benefits Section - Unified Below All Tickets */
+.benefits-section-unified {
+  margin-top: 4rem;
+  padding: 3rem;
+  background: rgba(255, 215, 0, 0.05);
+  border: 2px solid rgba(255, 215, 0, 0.2);
+  border-radius: 20px;
+  text-align: center;
+}
+
+.benefits-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #ffd700;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.benefits-list-unified {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.benefits-list-unified li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.benefits-list-unified li:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-3px);
+}
+
+.benefits-list-unified .check-icon {
+  font-size: 1.5rem;
+  color: #4caf50;
+  font-weight: 900;
+}
+
+/* Terms & Conditions - Simplified Single Card */
+.terms-content-simple {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.terms-card-unified {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 3rem 2.5rem;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+}
+
+.terms-card-unified:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 215, 0, 0.3);
+}
+
+.terms-list-simple {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+}
+
+.terms-list-simple li {
+  position: relative;
+  padding: 1rem 1rem 1rem 2.5rem;
+  margin-bottom: 0.8rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+  border-left: 3px solid #ffd700;
+  transition: all 0.2s ease;
+}
+
+.terms-list-simple li:hover {
+  background: rgba(255, 255, 255, 0.05);
+  padding-left: 3rem;
+}
+
+.terms-list-simple li::before {
+  content: '•';
+  position: absolute;
+  left: 1rem;
+  color: #ffd700;
+  font-weight: 900;
+  font-size: 1.5rem;
+  line-height: 1.6;
+}
+
+.terms-footer-note {
+  padding: 1.5rem;
+  background: rgba(255, 215, 0, 0.08);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.terms-footer-note p {
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.7;
+  font-size: 0.95rem;
+  margin: 0;
+  font-style: italic;
+}
+
 /* Responsive - Mobile Optimizations */
 @media (max-width: 768px) {
   .organizers-grid-modern {
@@ -1668,6 +1856,33 @@
     gap: 1.5rem;
   }
 
+  .benefits-section-unified {
+    padding: 2rem 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .benefits-title {
+    font-size: 1.4rem;
+  }
+
+  .benefits-list-unified {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .benefits-list-unified li {
+    font-size: 1rem;
+  }
+
+  .terms-card-unified {
+    padding: 2rem 1.5rem;
+  }
+
+  .terms-list-simple li {
+    font-size: 0.95rem;
+    padding: 0.8rem 0.8rem 0.8rem 2rem;
+  }
+
   .terms-card {
     padding: 2rem 1.5rem;
   }
@@ -1697,6 +1912,19 @@
   .organizer-logo-wrapper {
     width: 130px;
     height: 130px;
+  }
+
+  .pricing-grid-modern.three-cards {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .price-card-modern.featured {
+    transform: scale(1);
+  }
+
+  .price-card-modern.featured:hover {
+    transform: translateY(-8px) scale(1.02);
   }
 
   .price-icon-wrapper {

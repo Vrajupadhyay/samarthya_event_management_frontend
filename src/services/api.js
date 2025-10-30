@@ -126,6 +126,29 @@ export const registrationAPI = {
     } catch (error) {
       throw error;
     }
+  },
+
+  verify: async (registrationId, mobile) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/register/verify`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ registrationId, mobile }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Verification failed');
+      }
+      
+      return data;
+    } catch (error) {
+      throw error;
+    }
   }
 };
 
@@ -391,3 +414,6 @@ export default {
   adminAPI,
   scanAPI
 };
+
+// Named exports for convenience
+export const verifyRegistration = registrationAPI.verify;
