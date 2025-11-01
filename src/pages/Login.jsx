@@ -57,7 +57,7 @@ const Login = () => {
       <div className="login-card">
         <div className="login-header">
           <h1>🎫 Staff/Admin Login</h1>
-          <p>DJ Night 2025 - Event Management</p>
+          <p>BEAT BLAZE 2025 - Event Management</p>
         </div>
 
         <form onSubmit={handleSubmit} className="login-form">

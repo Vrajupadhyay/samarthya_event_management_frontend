@@ -171,14 +171,14 @@ const Register = () => {
     }
   };
 
-  const amount = formData.type === 'Individual' ? 1100 : (formData.type === 'Couple' ? 2000 : 4000);
+  const amount = formData.type === 'Individual' ? 1150 : (formData.type === 'Couple' ? 2000 : 3000);
 
   return (
     <div className="register-container">
       <div className="register-header">
         <Link to="/" className="back-button">← Back to Home</Link>
         <h1>Event Registration</h1>
-        <p>31st December DJ Night 2025</p>
+        <p>31st December BEAT BLAZE 2025</p>
       </div>
 
       <div className="register-content">
@@ -240,7 +240,7 @@ const Register = () => {
                   <h4>Individual</h4>
                   <p className="type-desc">For 1 person</p>
                 </div>
-                <p className="type-price">₹1,100</p>
+                <p className="type-price">₹1,150</p>
               </div>
               <div
                 className={`type-option ${formData.type === 'Couple' ? 'active' : ''}`}
@@ -258,9 +258,9 @@ const Register = () => {
               >
                 <div className="type-info">
                   <h4>Family</h4>
-                  <p className="type-desc">For 3+ persons</p>
+                  <p className="type-desc">For 3 persons</p>
                 </div>
-                <p className="type-price">₹4,000</p>
+                <p className="type-price">₹3,000</p>
               </div>
             </div>
           </div>

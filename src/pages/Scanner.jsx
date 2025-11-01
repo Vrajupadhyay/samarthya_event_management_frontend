@@ -163,7 +163,7 @@ const Scanner = () => {
       <header className="scanner-header">
         <div className="header-content">
           <h1>📱 QR Scanner</h1>
-          <p>DJ Night 2025 - Entry Verification</p>
+          <p>BEAT BLAZE 2025 - Entry Verification</p>
         </div>
         <button className="logout-btn" onClick={handleLogout}>
           Logout

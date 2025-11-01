@@ -118,8 +118,8 @@ const Success = () => {
           <div className="ticket-logo">
             <div className="logo-circle">🎉</div>
             <div className="event-info">
-              <h2>31st December DJ Night 2025</h2>
-              <p>XYZ Club, City</p>
+              <h2>31st December BEAT BLAZE 2025</h2>
+              <p>7 Sports Academy, Rampura, Bakrol, Anand, Gujarat</p>
             </div>
           </div>
           <div className="ticket-type-badge">

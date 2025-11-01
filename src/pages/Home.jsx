@@ -44,9 +44,20 @@ const Home = () => {
         <div className="hero-overlay"></div>
         <div className="hero-content">
           <div className="hero-badge">✨ NEW YEAR 2026 SPECIAL ✨</div>
+          
+          {/* Event Logo */}
+          <center>
+            <div className="hero-logo-wrapper">
+              <img 
+                src="/logo.png" 
+                alt="Event Logo" 
+                className="hero-logo"
+              />
+            </div>
+          </center>
+          
           <h1 className="hero-title">
-            31st December DJ Night
-            <span className="hero-subtitle">with Dinner 🍽️</span>
+            <span className="hero-subtitle">31st December DJ Party</span>
           </h1>
           <p className="hero-tagline">
             Celebrate the New Year in Style!
@@ -83,19 +94,19 @@ const Home = () => {
         <div className="container">
           <div className="section-header">
             <h2 className="section-title">Organized By</h2>
-            <p className="section-subtitle">Proudly presented by premier organizations</p>
+            {/* <p className="section-subtitle">Proudly presented by premier organizations</p> */}
           </div>
           <div className="organizers-grid-modern">
             <div className="organizer-card-modern">
               <div className="organizer-logo-wrapper">
                 <img 
-                  src="https://7sportsacademy.com/wp-content/uploads/2025/04/7-S-Logo1-1.webp" 
+                  src="/7 sport logo-1.png" 
                   alt="7 Sports Academy" 
                   className="organizer-logo-img"
                 />
               </div>
               <h3>7 Sports Academy</h3>
-              <p>Leading sports and fitness excellence center</p>
+              {/* <p>Leading sports and fitness excellence center</p> */}
               <div className="organizer-badge">Organizer</div>
             </div>
             <div className="organizer-card-modern">
@@ -107,7 +118,7 @@ const Home = () => {
                 />
               </div>
               <h3>Samarthya Events</h3>
-              <p>Premier event management and entertainment</p>
+              {/* <p>Premier event management and entertainment</p> */}
               <div className="organizer-badge">Organizer</div>
             </div>
           </div>
@@ -126,26 +137,26 @@ const Home = () => {
               <div className="detail-icon-large">📅</div>
               <h3>Date & Time</h3>
               <p>31st December 2025</p>
-              <p className="detail-highlight">7:30 PM onwards</p>
+              <p className="detail-highlight">7:00 PM onwards</p>
             </div>
             <div className="detail-card-modern">
               <div className="detail-icon-large">📍</div>
               <h3>Venue</h3>
               <p>Premium Event Venue</p>
-              <p className="detail-highlight">Vadodara, Gujarat</p>
+              <p className="detail-highlight">7 Sports Academy, Rampura, Bakrol, Anand, Gujarat</p>
             </div>
-            <div className="detail-card-modern">
+            {/* <div className="detail-card-modern">
               <div className="detail-icon-large">👔</div>
               <h3>Dress Code</h3>
               <p>Smart Casual</p>
               <p className="detail-highlight">Party Ready</p>
-            </div>
-            <div className="detail-card-modern">
+            </div> */}
+            {/* <div className="detail-card-modern">
               <div className="detail-icon-large">🎫</div>
               <h3>Entry</h3>
               <p>QR Code Based</p>
               <p className="detail-highlight">E-Ticket Required</p>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
@@ -164,9 +175,14 @@ const Home = () => {
               <p>Live DJ spinning the best tracks all night long</p>
             </div>
             <div className="facility-card-modern">
-              <div className="facility-icon-large">🍔</div>
-              <h3>Dinner & Food</h3>
+              <div className="facility-icon-large">🍽️</div>
+              <h3>Dinner</h3>
               <p>Delicious dinner buffet with multiple cuisines</p>
+            </div>
+            <div className="facility-card-modern">
+              <div className="facility-icon-large">🚗</div>
+              <h3>Valet Parking</h3>
+              <p>Convenient valet parking service for all guests</p>
             </div>
             <div className="facility-card-modern">
               <div className="facility-icon-large">🎆</div>
@@ -198,7 +214,7 @@ const Home = () => {
               <h3 className="price-title">Individual</h3>
               <div className="price-amount-wrapper">
                 <span className="price-currency">₹</span>
-                <span className="price-amount">1,100</span>
+                <span className="price-amount">1,150</span>
               </div>
               <p className="price-per-person">Solo Entry</p>
             </div>
@@ -214,7 +230,7 @@ const Home = () => {
                 <span className="price-currency">₹</span>
                 <span className="price-amount">2,000</span>
               </div>
-              <p className="price-per-person">₹1,000 per person</p>
+              <p className="price-per-person">For 2 person</p>
             </div>
 
             {/* Family Pass */}
@@ -226,9 +242,9 @@ const Home = () => {
               <h3 className="price-title">Family</h3>
               <div className="price-amount-wrapper">
                 <span className="price-currency">₹</span>
-                <span className="price-amount">4,000</span>
+                <span className="price-amount">3,000</span>
               </div>
-              <p className="price-per-person">3+ members</p>
+              <p className="price-per-person">3 members</p>
             </div>
           </div>
 
@@ -238,9 +254,9 @@ const Home = () => {
             <ul className="benefits-list-unified">
               <li><span className="check-icon">✓</span> Entry for specified person(s)</li>
               <li><span className="check-icon">✓</span> Unlimited dinner buffet</li>
-              <li><span className="check-icon">✓</span> Welcome drinks</li>
+              {/* <li><span className="check-icon">✓</span> Welcome drinks</li> */}
               <li><span className="check-icon">✓</span> DJ & live entertainment</li>
-              <li><span className="check-icon">✓</span> Photo booth access</li>
+              <li><span className="check-icon">✓</span> Photo booth</li>
             </ul>
           </div>
         </div>
@@ -262,12 +278,13 @@ const Home = () => {
                 <li>Full payment required to confirm registration</li>
                 <li>Registration once confirmed is non-refundable</li>
                 <li>Tickets are non-transferable</li>
-                <li>Dress code: Smart Casual - No shorts/slippers allowed</li>
+                <li>Alcohol is strictly prohibited at the event</li>
                 <li>Outside food and beverages strictly prohibited</li>
                 <li>Security check mandatory at entry</li>
                 <li>Management reserves the right to deny entry</li>
                 <li>Organizers not responsible for lost belongings</li>
                 <li>Event photos may be used for promotional purposes</li>
+                <li>Organizers reserve the right to remove any attendee from the event for misconduct or nuisance without refund</li>
               </ul>
               <div className="terms-footer-note">
                 <p>By registering, you agree to abide by all terms and conditions. Organizers reserve the right to make changes without prior notice.</p>
@@ -296,16 +313,15 @@ const Home = () => {
           <div className="footer-content">
             <div className="footer-section">
               <h4>Event Information</h4>
-              <p>31st December DJ Night 2025</p>
-              <p>Premium Event Venue</p>
-              <p>Vadodara, Gujarat</p>
-              <p>7:30 PM onwards</p>
+              <p>31st December BEAT BLAZE 2025</p>
+              {/* <p>Premium Event Venue</p> */}
+              <p>7 Sports Academy, Rampura, Bakrol, Anand, Gujarat</p>
+              <p>7:00 PM onwards</p>
             </div>
             <div className="footer-section">
               <h4>Contact Us</h4>
-              <p>Email: event@ieeebvm.in</p>
-              <p>Phone: +91 98765 43210</p>
-              <p>Phone: +91 98765 43211</p>
+              <p>Email: samarthyaevents07@gmail.com</p>
+              <p>Phone: +91 9173864156</p>
             </div>
             <div className="footer-section">
               <h4>Quick Links</h4>
@@ -318,11 +334,11 @@ const Home = () => {
               <h4>Organized By</h4>
               <p>7 Sports Academy</p>
               <p>Samarthya Events</p>
-              <p style={{marginTop: '1rem', fontSize: '0.85rem', color: 'rgba(255,255,255,0.5)'}}>In association with event partners</p>
+              {/* <p style={{marginTop: '1rem', fontSize: '0.85rem', color: 'rgba(255,255,255,0.5)'}}>In association with event partners</p> */}
             </div>
           </div>
           <div className="footer-bottom">
-            <p>&copy; 2025 DJ Night Event. All rights reserved.</p>
+            <p>&copy; 2025 BEAT BLAZE Event. All rights reserved.</p>
             <div className="footer-links">
               <Link to="/login">Staff/Admin Login</Link>
             </div>

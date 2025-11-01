@@ -30,7 +30,7 @@
   line-height: 1.6;
 }
 
-/* Hero Section - Mobile First */
+/* Hero Section - Dark Theme */
 .hero-section {
   position: relative;
   min-height: 100vh;
@@ -38,9 +38,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 25%, #16213e 50%, #1a1a2e 75%, #0a0a0a 100%);
   background-size: 200% 200%;
-  animation: gradientShift 10s ease infinite;
+  animation: gradientShift 15s ease infinite;
   overflow: hidden;
   padding: 1rem;
 }
@@ -54,7 +54,10 @@
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.6);
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(138, 43, 226, 0.1) 0%, transparent 50%);
 }
 
 .hero-content {
@@ -68,57 +71,108 @@
 
 .hero-badge {
   display: inline-block;
-  padding: 0.4rem 1rem;
-  background: rgba(255, 255, 255, 0.2);
+  padding: 0.5rem 1.5rem;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 140, 0, 0.2));
   backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 215, 0, 0.3);
   border-radius: 50px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
   animation: pulse 2s ease-in-out infinite;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+  color: #ffd700;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+  }
+}
+
+/* Hero Logo Styling - BIGGER */
+.hero-logo-wrapper {
+  margin: 2rem auto 1.5rem;
+  animation: logoFloat 3s ease-in-out infinite;
+}
+
+.hero-logo {
+  width: 450px; /* Increased from 300px */
+  height: auto;
+  max-width: 95%;
+  filter: drop-shadow(0 0 40px rgba(255, 215, 0, 0.5));
+  transition: all 0.3s ease;
+}
+
+.hero-logo:hover {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 50px rgba(255, 215, 0, 0.7));
+}
+
+@keyframes logoFloat {
+  0%, 100% { 
+    transform: translateY(0px);
+  }
+  50% { 
+    transform: translateY(-15px);
+  }
 }
 
 .hero-title {
-  font-size: 2rem;
-  font-weight: 900;
-  margin-bottom: 0.5rem;
-  text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
-  line-height: 1.1;
+  font-size: 1.2rem; /* Reduced from 1.5rem */
+  font-weight: 800;
+  margin-bottom: 0.3rem;
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+  line-height: 1.2;
+  animation: titleGlow 2s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+  0%, 100% { 
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
+  }
+  50% { 
+    filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.6));
+  }
 }
 
 .hero-subtitle {
   display: block;
-  font-size: 1.5rem;
-  margin-top: 0.3rem;
+  font-size: 1.2rem; /* Reduced from larger */
+  margin-top: 0.2rem;
   background: linear-gradient(45deg, #ffd700, #ffed4e);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  font-weight: 900;
+  font-weight: 800;
 }
 
 .hero-tagline {
-  font-size: 1rem;
-  margin-bottom: 2rem;
-  opacity: 0.95;
+  font-size: 0.9rem; /* Reduced from 1rem */
+  margin-bottom: 1.5rem;
+  opacity: 0.9;
   line-height: 1.4;
 }
 
-/* Countdown Timer - Mobile First */
+/* Countdown Timer - Smaller & Compact */
 .countdown-timer {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0.6rem;
+  gap: 0.5rem;
   justify-content: center;
-  margin: 2rem 0;
-  max-width: 400px;
+  margin: 1.5rem 0;
+  max-width: 350px; /* Reduced from 400px */
   margin-left: auto;
   margin-right: auto;
 }
@@ -128,34 +182,35 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(10px);
-  padding: 0.8rem 0.5rem;
-  border-radius: 12px;
-  border: 2px solid rgba(255, 255, 255, 0.25);
+  padding: 0.6rem 0.4rem; /* Reduced padding */
+  border-radius: 10px;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
   aspect-ratio: 1;
 }
 
 .countdown-value {
-  font-size: 1.8rem;
+  font-size: 1.4rem; /* Reduced from 1.8rem */
   font-weight: 900;
   line-height: 1;
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.2rem;
+  color: #ffd700;
 }
 
 .countdown-label {
-  font-size: 0.65rem;
-  opacity: 0.85;
+  font-size: 0.55rem; /* Reduced from 0.65rem */
+  opacity: 0.8;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
   font-weight: 600;
 }
 
-/* CTA Button - Mobile Optimized */
+/* CTA Button - Smaller & Compact */
 .cta-button, .register-button {
   display: inline-block;
-  padding: 1rem 2rem;
-  font-size: 1rem;
+  padding: 0.8rem 1.8rem; /* Reduced padding */
+  font-size: 0.9rem; /* Reduced font size */
   font-weight: 800;
   color: #000;
   background: linear-gradient(135deg, #ffd700, #ffed4e);
@@ -1790,6 +1845,49 @@
 
 /* Responsive - Mobile Optimizations */
 @media (max-width: 768px) {
+  /* Hero Logo - Mobile - BIGGER */
+  .hero-logo {
+    width: 300px; /* Increased from 150px for mobile */
+    max-width: 90%;
+  }
+
+  .hero-badge {
+    font-size: 0.65rem;
+    padding: 0.4rem 1rem;
+    letter-spacing: 1px;
+  }
+
+  .hero-title {
+    font-size: 1rem; /* Smaller */
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .hero-tagline {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Countdown - Smaller on mobile */
+  .countdown-timer {
+    max-width: 320px;
+    gap: 0.4rem;
+  }
+
+  .countdown-item {
+    padding: 0.5rem 0.3rem;
+  }
+
+  .countdown-value {
+    font-size: 1.2rem; /* Smaller */
+  }
+
+  .countdown-label {
+    font-size: 0.5rem;
+  }
+
   .organizers-grid-modern {
     grid-template-columns: 1fr;
     gap: 2rem;
@@ -1955,6 +2053,23 @@
 
 /* Tablet Landscape */
 @media (min-width: 769px) and (max-width: 1024px) {
+  /* Tablet - Logo sizing */
+  .hero-logo {
+    width: 380px;
+  }
+
+  .hero-title {
+    font-size: 1.3rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.3rem;
+  }
+
+  .countdown-value {
+    font-size: 1.5rem;
+  }
+
   .organizers-grid-modern {
     grid-template-columns: repeat(2, 1fr);
   }
