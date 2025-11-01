@@ -24,7 +24,7 @@ const ScrollToTop = ({ behavior = 'instant' }) => {
       '/scanner': 'Entry Scanner - BEAT BLAZE 2025',
     };
 
-    const title = pageTitles[pathname] || 'DJ Night 2025';
+    const title = pageTitles[pathname] || 'BEAT BLAZE 2025';
     document.title = title;
   }, [pathname, behavior]);
 

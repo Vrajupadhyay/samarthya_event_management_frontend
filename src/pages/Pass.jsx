@@ -97,12 +97,12 @@ const Pass = () => {
             <span className="badge-approved">✓ APPROVED</span>
           </div>
           <h1 className="pass-title">
-            <span className="title-gradient">DJ Night 2025</span>
+            <span className="title-gradient">BEAT BLAZE 2025</span>
           </h1>
           <p className="pass-subtitle">New Year's Eve Celebration</p>
           <div className="pass-date">
             <span className="date-icon">📅</span>
-            <span>31st December 2025 | 8:00 PM Onwards</span>
+            <span>31st December 2025 | 7:00 PM Onwards</span>
           </div>
         </div>
 

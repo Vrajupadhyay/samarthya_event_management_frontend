@@ -55,6 +55,21 @@ const AdminDashboard = () => {
     }
   };
 
+  // Fast refresh - only registrations list
+  const [refreshing, setRefreshing] = useState(false);
+  const handleRefreshList = async () => {
+    setRefreshing(true);
+    try {
+      const regsRes = await adminAPI.getRegistrations(filters);
+      setRegistrations(regsRes.data);
+    } catch (error) {
+      console.error('Error refreshing registrations:', error);
+      alert(error.message);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   const handleLogout = () => {
     authAPI.logout();
     navigate('/login');
@@ -358,6 +373,23 @@ const AdminDashboard = () => {
       <div className="table-section">
         <div className="table-header">
           <h2>📋 Registrations ({registrations.length})</h2>
+          <button 
+            onClick={handleRefreshList} 
+            className="btn-refresh"
+            disabled={refreshing}
+            title="Refresh registrations list"
+          >
+            {refreshing ? (
+              <>
+                <span className="spinner-icon">⟳</span>
+                Refreshing...
+              </>
+            ) : (
+              <>
+                🔄 Refresh
+              </>
+            )}
+          </button>
         </div>
         
         <div className="table-container">
