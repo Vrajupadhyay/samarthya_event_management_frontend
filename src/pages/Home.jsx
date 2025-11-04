@@ -108,11 +108,20 @@ const Home = () => {
               <h3>7 Sports Academy</h3>
               {/* <p>Leading sports and fitness excellence center</p> */}
               <div className="organizer-badge">Organizer</div>
+              <br />
+              <a 
+                href="https://7sportsacademy.com/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="organizer-website-btn"
+              >
+                🌐 Visit Website
+              </a>
             </div>
             <div className="organizer-card-modern">
               <div className="organizer-logo-wrapper">
                 <img 
-                  src="https://samarthyaevents.com/assets/logo-ZtLsZ4rm.jpeg" 
+                  src="/sm.jpg" 
                   alt="Samarthya Events" 
                   className="organizer-logo-img"
                 />
@@ -120,6 +129,15 @@ const Home = () => {
               <h3>Samarthya Events</h3>
               {/* <p>Premier event management and entertainment</p> */}
               <div className="organizer-badge">Organizer</div>
+              <br />
+              <a 
+                href="https://samarthyaevents.com/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="organizer-website-btn"
+              >
+                🌐 Visit Website
+              </a>
             </div>
           </div>
         </div>

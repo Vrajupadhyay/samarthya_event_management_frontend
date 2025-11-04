@@ -187,7 +187,7 @@ const Register = () => {
           <div className="form-section">
             <h3>🎫 Ticket Information</h3>
             <div className="form-group">
-              <label>Ticket Number * (Just enter the 4 digits)</label>
+              <label>Ticket Number * Ask to Organizer</label>
               <div className="ticket-input-wrapper">
                 <span className="ticket-prefix">BB_</span>
                 <input
@@ -223,7 +223,7 @@ const Register = () => {
               )}
               
               <small className="form-hint">
-                Enter only the 4-digit number (e.g., 0001, 0100, 1000)
+                {/* Enter only the 4-digit number (e.g., 0001, 0100, 1000) */}
               </small>
             </div>
           </div>
@@ -292,13 +292,13 @@ const Register = () => {
                 />
               </div>
               <div className="form-group">
-                <label>Mobile Number *</label>
+                <label>Whatsapp Mobile Number *</label>
                 <input
                   type="tel"
                   name="mobile"
                   value={formData.mobile}
                   onChange={handleChange}
-                  placeholder="10 digit mobile number"
+                  placeholder="10 digit whatsapp number"
                   maxLength="10"
                   required
                 />
@@ -507,7 +507,7 @@ const Register = () => {
           </button>
 
           <p className="form-note">
-            * After registration, you will receive a confirmation email with your QR code for entry.
+            * After registration, you will receive a confirmation email and WhatsApp message with your QR code for entry.
           </p>
         </form>
       </div>

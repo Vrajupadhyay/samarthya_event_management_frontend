@@ -176,7 +176,7 @@
 
 .form-group label {
   margin-bottom: 0.4rem;
-  color: rgba(255, 255, 255, 0.9);
+  color: white;
   font-weight: 600;
   font-size: 0.85rem;
   text-transform: uppercase;
@@ -475,7 +475,7 @@
 
 /* Form elements inherit the default dark theme styles */
 .member-card .form-group label {
-  color: rgba(255, 255, 255, 0.9);
+  color: white;
   font-weight: 600;
   font-size: 0.85rem;
 }
