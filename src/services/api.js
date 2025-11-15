@@ -408,11 +408,165 @@ export const scanAPI = {
   }
 };
 
+// Promocode API
+export const promocodeAPI = {
+  create: async (promocodeData) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/promocode/create`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeaders(),
+        },
+        credentials: 'include',
+        body: JSON.stringify(promocodeData),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to create promocode');
+      }
+      
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  getAll: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/promocode/all`, {
+        headers: {
+          ...getAuthHeaders(),
+        },
+        credentials: 'include',
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to fetch promocodes');
+      }
+      
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  validate: async (code) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/promocode/validate/${code}`, {
+        credentials: 'include',
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Invalid promocode');
+      }
+      
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  getUsage: async (code) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/promocode/usage/${code}`, {
+        headers: {
+          ...getAuthHeaders(),
+        },
+        credentials: 'include',
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to fetch usage data');
+      }
+      
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  deactivate: async (id) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/promocode/deactivate/${id}`, {
+        method: 'PATCH',
+        headers: {
+          ...getAuthHeaders(),
+        },
+        credentials: 'include',
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to deactivate promocode');
+      }
+      
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  activate: async (id) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/promocode/activate/${id}`, {
+        method: 'PATCH',
+        headers: {
+          ...getAuthHeaders(),
+        },
+        credentials: 'include',
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to activate promocode');
+      }
+      
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  delete: async (id) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/promocode/delete/${id}`, {
+        method: 'DELETE',
+        headers: {
+          ...getAuthHeaders(),
+        },
+        credentials: 'include',
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to delete promocode');
+      }
+      
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+};
+
 export default {
   authAPI,
   registrationAPI,
   adminAPI,
-  scanAPI
+  scanAPI,
+  promocodeAPI
 };
 
 // Named exports for convenience

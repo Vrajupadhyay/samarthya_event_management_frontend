@@ -1,0 +1,411 @@
+/* Promocode Management Styles */
+
+.promocode-management {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Create Promocode Section */
+.promo-create-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.promo-create-section h2 {
+  color: #ffd700;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.promo-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.promo-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.promo-form-group label {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.promo-form-group input {
+  padding: 0.75rem;
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.promo-form-group input:focus {
+  outline: none;
+  border-color: #ffd700;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.promo-submit-btn {
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.promo-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+}
+
+/* Promocodes List Section */
+.promo-list-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.promo-list-section h2 {
+  color: #ffd700;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.promo-loading,
+.promo-empty {
+  text-align: center;
+  padding: 3rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.1rem;
+}
+
+.promo-table-container {
+  overflow-x: auto;
+}
+
+.promo-table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #fff;
+}
+
+.promo-table thead {
+  background: rgba(255, 215, 0, 0.1);
+  border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.promo-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #ffd700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.promo-table td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.promo-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.promo-table tbody tr:hover {
+  background: rgba(255, 215, 0, 0.05);
+}
+
+.promo-code {
+  color: #ffd700;
+  font-size: 1.1rem;
+  font-family: 'Courier New', monospace;
+  background: rgba(255, 215, 0, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.promo-status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.promo-status.active {
+  background: rgba(0, 255, 0, 0.2);
+  color: #0f0;
+  border: 1px solid rgba(0, 255, 0, 0.3);
+}
+
+.promo-status.inactive {
+  background: rgba(255, 0, 0, 0.2);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 0, 0, 0.3);
+}
+
+.text-danger {
+  color: #ff6b6b !important;
+  font-weight: 600;
+}
+
+/* Action Buttons */
+.promo-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.promo-btn {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.promo-btn-view {
+  background: rgba(0, 123, 255, 0.2);
+  color: #0a84ff;
+  border: 1px solid rgba(0, 123, 255, 0.3);
+}
+
+.promo-btn-view:hover {
+  background: rgba(0, 123, 255, 0.3);
+}
+
+.promo-btn-activate {
+  background: rgba(0, 255, 0, 0.2);
+  color: #0f0;
+  border: 1px solid rgba(0, 255, 0, 0.3);
+}
+
+.promo-btn-activate:hover {
+  background: rgba(0, 255, 0, 0.3);
+}
+
+.promo-btn-deactivate {
+  background: rgba(255, 165, 0, 0.2);
+  color: #ffa500;
+  border: 1px solid rgba(255, 165, 0, 0.3);
+}
+
+.promo-btn-deactivate:hover {
+  background: rgba(255, 165, 0, 0.3);
+}
+
+.promo-btn-delete {
+  background: rgba(255, 0, 0, 0.2);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 0, 0, 0.3);
+}
+
+.promo-btn-delete:hover {
+  background: rgba(255, 0, 0, 0.3);
+}
+
+/* Usage Modal */
+.promo-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.promo-modal {
+  background: linear-gradient(135deg, #1a1a2e 0%, #0a0a0a 100%);
+  border-radius: 12px;
+  max-width: 1000px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.promo-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.promo-modal-header h3 {
+  color: #ffd700;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.promo-modal-close {
+  background: rgba(255, 0, 0, 0.2);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.promo-modal-close:hover {
+  background: rgba(255, 0, 0, 0.3);
+  transform: rotate(90deg);
+}
+
+.promo-modal-loading {
+  padding: 3rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.promo-modal-content {
+  padding: 1.5rem;
+  color: #fff;
+}
+
+.promo-usage-summary {
+  background: rgba(255, 215, 0, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.promo-usage-summary h4 {
+  color: #ffd700;
+  margin: 0 0 0.5rem 0;
+}
+
+.promo-usage-summary p {
+  margin: 0.25rem 0;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.promo-modal-content h4 {
+  color: #ffd700;
+  margin: 1.5rem 0 1rem 0;
+}
+
+.promo-no-usage {
+  text-align: center;
+  padding: 2rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.promo-usage-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.promo-usage-table thead {
+  background: rgba(255, 215, 0, 0.1);
+}
+
+.promo-usage-table th {
+  padding: 0.75rem;
+  text-align: left;
+  color: #ffd700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.promo-usage-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.status-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-pending {
+  background: rgba(255, 165, 0, 0.2);
+  color: #ffa500;
+  border: 1px solid rgba(255, 165, 0, 0.3);
+}
+
+.status-accepted {
+  background: rgba(0, 255, 0, 0.2);
+  color: #0f0;
+  border: 1px solid rgba(0, 255, 0, 0.3);
+}
+
+.status-rejected {
+  background: rgba(255, 0, 0, 0.2);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 0, 0, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .promocode-management {
+    padding: 1rem;
+  }
+
+  .promo-create-section,
+  .promo-list-section {
+    padding: 1rem;
+  }
+
+  .promo-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .promo-table th,
+  .promo-table td {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .promo-actions {
+    flex-direction: column;
+  }
+
+  .promo-btn {
+    width: 100%;
+  }
+
+  .promo-modal {
+    margin: 0;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .promo-usage-table {
+    font-size: 0.8rem;
+  }
+}

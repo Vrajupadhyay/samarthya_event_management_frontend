@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authAPI, adminAPI } from '../services/api';
+import PromocodeManagement from '../components/PromocodeManagement';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -8,6 +9,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [statistics, setStatistics] = useState(null);
   const [registrations, setRegistrations] = useState([]);
+  const [activeView, setActiveView] = useState('registrations'); // New state for view toggle
   const [filters, setFilters] = useState({
     status: '',
     type: '',
@@ -336,8 +338,27 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="filters-section">
+      {/* View Toggle Buttons */}
+      <div className="view-toggle-section">
+        <button 
+          className={`toggle-btn ${activeView === 'registrations' ? 'active' : ''}`}
+          onClick={() => setActiveView('registrations')}
+        >
+          📋 Registrations
+        </button>
+        <button 
+          className={`toggle-btn ${activeView === 'promocodes' ? 'active' : ''}`}
+          onClick={() => setActiveView('promocodes')}
+        >
+          🎁 Promocodes
+        </button>
+      </div>
+
+      {/* Conditional Rendering based on Active View */}
+      {activeView === 'registrations' ? (
+        <>
+          {/* Filters */}
+          <div className="filters-section">
         <div className="filters-container">
           <input
             type="text"
@@ -822,6 +843,11 @@ const AdminDashboard = () => {
             </form>
           </div>
         </div>
+      )}
+        </>
+      ) : (
+        /* Promocode Management View */
+        <PromocodeManagement />
       )}
     </div>
   );

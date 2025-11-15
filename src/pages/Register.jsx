@@ -1,74 +1,35 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { registrationAPI } from '../services/api';
+import { registrationAPI, promocodeAPI } from '../services/api';
 import './Register.css';
 
 const Register = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [ticketCheckLoading, setTicketCheckLoading] = useState(false);
-  const [ticketStatus, setTicketStatus] = useState(null);
+  const [promocodeLoading, setPromocodeLoading] = useState(false);
+  const [promocodeData, setPromocodeData] = useState(null);
+  const [promocodeInput, setPromocodeInput] = useState('');
   
-  // Initialize with Couple type and 1 partner member by default
+  // Initialize with Individual type by default
   const [formData, setFormData] = useState({
-    ticketId: '',
-    type: 'Couple',
+    type: 'Individual',
     firstName: '',
     lastName: '',
     mobile: '',
     email: '',
     gender: 'Male',
     paymentMode: 'Cash',
-    additionalMembers: [{ firstName: '', lastName: '', gender: 'Male' }]
+    promocode: '',
+    additionalMembers: []
   });
-
-  // Check ticket availability when ticketId changes
-  useEffect(() => {
-    const checkTicket = async () => {
-      if (formData.ticketId && formData.ticketId.length >= 7) {
-        setTicketCheckLoading(true);
-        try {
-          const response = await fetch(`http://localhost:5000/api/register/tickets/check/${formData.ticketId}`);
-          const result = await response.json();
-          setTicketStatus(result);
-        } catch (err) {
-          console.error('Error checking ticket:', err);
-          setTicketStatus(null);
-        } finally {
-          setTicketCheckLoading(false);
-        }
-      } else {
-        setTicketStatus(null);
-      }
-    };
-
-    const debounceTimer = setTimeout(checkTicket, 500);
-    return () => clearTimeout(debounceTimer);
-  }, [formData.ticketId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
-    // Auto-format ticket ID: add BB_ prefix and keep only numbers
-    if (name === 'ticketId') {
-      // Remove any non-digit characters
-      const digitsOnly = value.replace(/\D/g, '');
-      // Limit to 4 digits
-      const limitedDigits = digitsOnly.slice(0, 4);
-      // Auto-add BB_ prefix
-      const formattedValue = limitedDigits ? `BB_${limitedDigits}` : '';
-      
-      setFormData(prev => ({
-        ...prev,
-        [name]: formattedValue
-      }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: value
-      }));
-    }
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
     setError('');
   };
 
@@ -78,29 +39,11 @@ const Register = () => {
       type,
       // For Individual: no additional members (total 1 person)
       // For Couple: automatically add 1 member (total 2 persons)
-      // For Family: keep existing members or empty array
       additionalMembers: type === 'Individual' 
         ? []
         : type === 'Couple' 
         ? [{ firstName: '', lastName: '', gender: 'Male' }]
         : prev.additionalMembers
-    }));
-  };
-
-  const addMember = () => {
-    setFormData(prev => ({
-      ...prev,
-      additionalMembers: [
-        ...prev.additionalMembers,
-        { firstName: '', lastName: '', gender: 'Male' }
-      ]
-    }));
-  };
-
-  const removeMember = (index) => {
-    setFormData(prev => ({
-      ...prev,
-      additionalMembers: prev.additionalMembers.filter((_, i) => i !== index)
     }));
   };
 
@@ -113,12 +56,45 @@ const Register = () => {
     }));
   };
 
+  const validatePromocode = async () => {
+    if (!promocodeInput.trim()) {
+      setError('Please enter a promocode');
+      return;
+    }
+
+    setPromocodeLoading(true);
+    setError('');
+
+    try {
+      const result = await promocodeAPI.validate(promocodeInput.trim());
+
+      if (result.success) {
+        setPromocodeData(result.data);
+        setFormData(prev => ({ ...prev, promocode: result.data.code }));
+        setError('');
+      } else {
+        setPromocodeData(null);
+        setFormData(prev => ({ ...prev, promocode: '' }));
+        setError(result.message || 'Invalid promocode');
+      }
+    } catch (err) {
+      console.error('Error validating promocode:', err);
+      setPromocodeData(null);
+      setFormData(prev => ({ ...prev, promocode: '' }));
+      setError(err.message || 'Failed to validate promocode');
+    } finally {
+      setPromocodeLoading(false);
+    }
+  };
+
+  const removePromocode = () => {
+    setPromocodeData(null);
+    setPromocodeInput('');
+    setFormData(prev => ({ ...prev, promocode: '' }));
+    setError('');
+  };
+
   const validateForm = () => {
-    // Validate ticket ID
-    if (!formData.ticketId.trim()) return 'Ticket ID is required';
-    if (!/^BB_\d{4}$/.test(formData.ticketId)) return 'Invalid ticket ID format. Must be BB_XXXX (e.g., BB_0001)';
-    if (ticketStatus && !ticketStatus.available) return 'This ticket is not available';
-    
     if (!formData.firstName.trim()) return 'First name is required';
     if (!formData.lastName.trim()) return 'Last name is required';
     if (!formData.mobile.trim()) return 'Mobile number is required';
@@ -129,11 +105,6 @@ const Register = () => {
     // For Couple: must have exactly 1 additional member (total 2)
     if (formData.type === 'Couple' && formData.additionalMembers.length !== 1) {
       return 'Couple registration requires 2 members total';
-    }
-    
-    // For Family: must have at least 1 additional member
-    if (formData.type === 'Family' && formData.additionalMembers.length === 0) {
-      return 'Please add at least one additional family member';
     }
 
     for (let i = 0; i < formData.additionalMembers.length; i++) {
@@ -162,7 +133,7 @@ const Register = () => {
       const response = await registrationAPI.create(formData);
       
       if (response.success) {
-        navigate(`/success/${response.data.assignedTicketId || response.data.ticketId}`);
+        navigate(`/success/${response.data.ticketId}`);
       }
     } catch (err) {
       setError(err.message || 'Registration failed. Please try again.');
@@ -171,7 +142,17 @@ const Register = () => {
     }
   };
 
-  const amount = formData.type === 'Individual' ? 1150 : (formData.type === 'Couple' ? 2000 : 3000);
+  // Calculate amount based on promocode or default prices
+  const getAmount = () => {
+    if (promocodeData) {
+      return formData.type === 'Individual' ? promocodeData.individualPrice : promocodeData.couplePrice;
+    }
+    return formData.type === 'Individual' ? 1150 : 2000;
+  };
+
+  const amount = getAmount();
+  const originalAmount = formData.type === 'Individual' ? 1150 : 2000;
+  const discount = originalAmount - amount;
 
   return (
     <div className="register-container">
@@ -183,51 +164,6 @@ const Register = () => {
 
       <div className="register-content">
         <form onSubmit={handleSubmit} className="register-form">
-          {/* Ticket ID Section */}
-          <div className="form-section">
-            <h3>🎫 Ticket Information</h3>
-            <div className="form-group">
-              <label>Ticket Number * Ask to Organizer</label>
-              <div className="ticket-input-wrapper">
-                <span className="ticket-prefix">BB_</span>
-                <input
-                  type="text"
-                  name="ticketId"
-                  value={formData.ticketId.replace('BB_', '')}
-                  onChange={handleChange}
-                  // placeholder="0001"
-                  maxLength={4}
-                  required
-                  className={`ticket-input ${ticketStatus ? (ticketStatus.available ? 'input-success' : 'input-error') : ''}`}
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                />
-              </div>
-              
-              {formData.ticketId && (
-                <div className="ticket-preview">
-                  Full Ticket ID: <strong>{formData.ticketId}</strong>
-                </div>
-              )}
-              
-              {ticketCheckLoading && (
-                <span className="ticket-status checking">
-                  🔄 Checking availability...
-                </span>
-              )}
-              
-              {ticketStatus && !ticketCheckLoading && (
-                <span className={`ticket-status ${ticketStatus.available ? 'available' : 'unavailable'}`}>
-                  {ticketStatus.available ? '✅ Available' : `❌ ${ticketStatus.message}`}
-                </span>
-              )}
-              
-              <small className="form-hint">
-                {/* Enter only the 4-digit number (e.g., 0001, 0100, 1000) */}
-              </small>
-            </div>
-          </div>
-
           {/* Registration Type */}
           <div className="form-section">
             <h3>Select Registration Type</h3>
@@ -251,16 +187,6 @@ const Register = () => {
                   <p className="type-desc">For 2 persons</p>
                 </div>
                 <p className="type-price">₹2,000</p>
-              </div>
-              <div
-                className={`type-option ${formData.type === 'Family' ? 'active' : ''}`}
-                onClick={() => handleTypeChange('Family')}
-              >
-                <div className="type-info">
-                  <h4>Family</h4>
-                  <p className="type-desc">For 3 persons</p>
-                </div>
-                <p className="type-price">₹3,000</p>
               </div>
             </div>
           </div>
@@ -392,75 +318,66 @@ const Register = () => {
             </div>
           )}
 
-          {/* Additional Members - Family */}
-          {formData.type === 'Family' && (
-            <div className="form-section">
-              <div className="section-header">
-                <h3>👨‍👩‍👧‍👦 Additional Family Members</h3>
-                <button type="button" className="add-member-btn" onClick={addMember}>
-                  ➕ Add Member
-                </button>
-              </div>
-
-              {formData.additionalMembers.map((member, index) => (
-                <div key={index} className="member-row">
-                  <div className="member-row-header">
-                    <span className="member-label">Member {index + 1}</span>
+          {/* Promocode Section */}
+          <div className="form-section">
+            <h3>🎁 Promocode (Optional)</h3>
+            {!promocodeData ? (
+              <div className="promocode-input-section">
+                <div className="form-group">
+                  <label>Have a promocode?</label>
+                  <div className="promocode-input-wrapper">
+                    <input
+                      type="text"
+                      value={promocodeInput}
+                      onChange={(e) => setPromocodeInput(e.target.value.toUpperCase())}
+                      placeholder="Enter promocode"
+                      className="promocode-input"
+                      disabled={promocodeLoading}
+                    />
                     <button
                       type="button"
-                      className="remove-member-btn"
-                      onClick={() => removeMember(index)}
+                      onClick={validatePromocode}
+                      className="validate-promocode-btn"
+                      disabled={promocodeLoading || !promocodeInput.trim()}
                     >
-                      🗑️ Remove
+                      {promocodeLoading ? 'Checking...' : 'Apply'}
                     </button>
                   </div>
-                  <div className="form-grid">
-                    <div className="form-group">
-                      <label>First Name *</label>
-                      <input
-                        type="text"
-                        value={member.firstName}
-                        onChange={(e) => handleMemberChange(index, 'firstName', e.target.value)}
-                        placeholder="Enter first name"
-                        required
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Last Name *</label>
-                      <input
-                        type="text"
-                        value={member.lastName}
-                        onChange={(e) => handleMemberChange(index, 'lastName', e.target.value)}
-                        placeholder="Enter last name"
-                        required
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Gender *</label>
-                      <select
-                        value={member.gender}
-                        onChange={(e) => handleMemberChange(index, 'gender', e.target.value)}
-                        required
-                      >
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
-                      </select>
-                    </div>
+                </div>
+              </div>
+            ) : (
+              <div className="promocode-applied">
+                <div className="promocode-success">
+                  <span className="success-icon">✅</span>
+                  <div className="success-details">
+                    <strong>Promocode Applied: {promocodeData.code}</strong>
+                    <p>Remaining uses: {promocodeData.remaining}</p>
                   </div>
-                  {index < formData.additionalMembers.length - 1 && (
-                    <div className="member-divider"></div>
-                  )}
+                  <button
+                    type="button"
+                    onClick={removePromocode}
+                    className="remove-promocode-btn"
+                  >
+                    Remove
+                  </button>
                 </div>
-              ))}
-
-              {formData.additionalMembers.length === 0 && (
-                <div className="empty-members">
-                  <p>No additional members added yet. Click "Add Member" to add family members.</p>
+                <div className="price-breakdown">
+                  <div className="price-row">
+                    <span>Original Price:</span>
+                    <span className="original-price">₹{originalAmount.toLocaleString()}</span>
+                  </div>
+                  <div className="price-row discount">
+                    <span>Discount:</span>
+                    <span>-₹{discount.toLocaleString()}</span>
+                  </div>
+                  <div className="price-row final">
+                    <span>Final Price:</span>
+                    <strong>₹{amount.toLocaleString()}</strong>
+                  </div>
                 </div>
-              )}
-            </div>
-          )}
+              </div>
+            )}
+          </div>
 
           {/* Summary */}
           <div className="form-section summary-section">
@@ -478,6 +395,12 @@ const Register = () => {
                 <span>Payment Mode:</span>
                 <strong>{formData.paymentMode}</strong>
               </div>
+              {promocodeData && (
+                <div className="summary-item">
+                  <span>Promocode:</span>
+                  <strong className="promo-code-highlight">{promocodeData.code}</strong>
+                </div>
+              )}
               <div className="summary-item total">
                 <span>Total Amount:</span>
                 <strong>₹{amount.toLocaleString()}</strong>

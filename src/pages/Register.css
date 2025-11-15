@@ -869,3 +869,144 @@
     width: auto;
   }
 }
+
+/* Promocode Section Styles */
+.promocode-input-section {
+  margin-top: 1rem;
+}
+
+.promocode-input-wrapper {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.promocode-input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 2px solid rgba(255, 215, 0, 0.3);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  font-size: 1rem;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.promocode-input:focus {
+  outline: none;
+  border-color: #ffd700;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.validate-promocode-btn {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.validate-promocode-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+}
+
+.validate-promocode-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.promocode-applied {
+  margin-top: 1rem;
+}
+
+.promocode-success {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(0, 255, 0, 0.1);
+  border: 2px solid rgba(0, 255, 0, 0.3);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.success-icon {
+  font-size: 1.5rem;
+}
+
+.success-details {
+  flex: 1;
+}
+
+.success-details strong {
+  display: block;
+  color: #0f0;
+  margin-bottom: 0.25rem;
+}
+
+.success-details p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.remove-promocode-btn {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 0, 0, 0.2);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+
+.remove-promocode-btn:hover {
+  background: rgba(255, 0, 0, 0.3);
+  border-color: #ff6b6b;
+}
+
+.price-breakdown {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.price-row.discount {
+  color: #0f0;
+  font-weight: 600;
+}
+
+.price-row.final {
+  border-top: 2px solid rgba(255, 215, 0, 0.3);
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  font-size: 1.2rem;
+  color: #ffd700;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.promo-code-highlight {
+  color: #0f0;
+  background: rgba(0, 255, 0, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 255, 0, 0.3);
+}

@@ -39,9 +39,17 @@ const Home = () => {
 
   return (
     <div className="home-container">
+      {/* Decorative Background Elements */}
+      <div className="bg-decoration">
+        <div className="floating-shape shape-1"></div>
+        <div className="floating-shape shape-2"></div>
+        <div className="floating-shape shape-3"></div>
+      </div>
+
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-overlay"></div>
+        <div className="hero-stars"></div>
         <div className="hero-content">
           <div className="hero-badge">✨ NEW YEAR 2026 SPECIAL ✨</div>
           
@@ -100,27 +108,6 @@ const Home = () => {
             <div className="organizer-card-modern">
               <div className="organizer-logo-wrapper">
                 <img 
-                  src="/7 sport logo-1.png" 
-                  alt="7 Sports Academy" 
-                  className="organizer-logo-img"
-                />
-              </div>
-              <h3>7 Sports Academy</h3>
-              {/* <p>Leading sports and fitness excellence center</p> */}
-              <div className="organizer-badge">Organizer</div>
-              <br />
-              <a 
-                href="https://7sportsacademy.com/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="organizer-website-btn"
-              >
-                🌐 Visit Website
-              </a>
-            </div>
-            <div className="organizer-card-modern">
-              <div className="organizer-logo-wrapper">
-                <img 
                   src="/sm.jpg" 
                   alt="Samarthya Events" 
                   className="organizer-logo-img"
@@ -132,6 +119,27 @@ const Home = () => {
               <br />
               <a 
                 href="https://samarthyaevents.com/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="organizer-website-btn"
+              >
+                🌐 Visit Website
+              </a>
+            </div>
+            <div className="organizer-card-modern">
+              <div className="organizer-logo-wrapper">
+                <img 
+                  src="/7 sport logo-1.png" 
+                  alt="7 Sports Academy" 
+                  className="organizer-logo-img"
+                />
+              </div>
+              <h3>7 Sports Academy</h3>
+              {/* <p>Leading sports and fitness excellence center</p> */}
+              <div className="organizer-badge">Organizer</div>
+              <br />
+              <a 
+                href="https://7sportsacademy.com/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="organizer-website-btn"
@@ -249,20 +257,6 @@ const Home = () => {
                 <span className="price-amount">2,000</span>
               </div>
               <p className="price-per-person">For 2 person</p>
-            </div>
-
-            {/* Family Pass */}
-            <div className="price-card-modern featured">
-              <div className="price-ribbon best">Best Value</div>
-              <div className="price-icon-wrapper">
-                {/* <div className="price-icon">👨‍👩‍👧‍👦</div> */}
-              </div>
-              <h3 className="price-title">Family</h3>
-              <div className="price-amount-wrapper">
-                <span className="price-currency">₹</span>
-                <span className="price-amount">3,000</span>
-              </div>
-              <p className="price-per-person">3 members</p>
             </div>
           </div>
 
