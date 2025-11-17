@@ -187,6 +187,38 @@ const Home = () => {
         </div>
       </section>
 
+      {/* Venue Location Section - Google Maps */}
+      <section className="location-section">
+        <div className="container">
+          <div className="section-header">
+            <h2 className="section-title">📍 Event Location</h2>
+            <p className="section-subtitle">7 Sports Academy, Rampura, Bakrol, Anand, Gujarat</p>
+          </div>
+          <div className="map-container">
+            <iframe 
+              src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=7%20Sports%20Academy%20Anand+(My%20Business%20Name)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+              width="100%" 
+              height="450" 
+              style={{ border: 0, borderRadius: '15px' }}
+              allowFullScreen="" 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+              title="7 Sports Academy Location"
+            ></iframe>
+            <div className="map-overlay-info">
+              <a 
+                href="https://maps.app.goo.gl/69mpjuJxerroVxTN7" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="get-directions-btn"
+              >
+                🧭 Get Directions
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Facilities Section - Grid View */}
       <section className="facilities-section">
         <div className="container">

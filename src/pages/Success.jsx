@@ -161,7 +161,7 @@ const Success = () => {
                 </div>
               </div>
 
-              <div className="event-details">
+              {/* <div className="event-details">
                 <h3 className="section-title">Event Details</h3>
                 <div className="detail-row">
                   <span className="detail-icon">📅</span>
@@ -175,7 +175,7 @@ const Success = () => {
                   <span className="detail-icon">📍</span>
                   <span className="detail-text">XYZ Club, City</span>
                 </div>
-              </div>
+              </div> */}
 
               <div className="payment-info">
                 <h3 className="section-title">Payment Information</h3>
@@ -242,7 +242,7 @@ const Success = () => {
         </div>
       )}
 
-      <div className="info-cards">
+      {/* <div className="info-cards">
         <div className="info-card">
           <div className="info-card-icon">⚠️</div>
           <h4>Important</h4>
@@ -264,7 +264,7 @@ const Success = () => {
             <li>Outside food and beverages not allowed</li>
           </ul>
         </div>
-      </div>
+      </div> */}
 
       <div className="action-buttons no-print">
         {isVerified && (
