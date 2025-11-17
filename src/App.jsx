@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { useState, useEffect } from 'react';
 import Home from './pages/Home';
 import Register from './pages/Register';
+import SportsAcademyRegister from './pages/SportsAcademyRegister';
 import Success from './pages/Success';
 import Pass from './pages/Pass';
 import Verify from './pages/Verify';
@@ -12,7 +13,7 @@ import ScrollToTop from './components/ScrollToTop';
 import { authAPI } from './services/api';
 import './App.css';
 
-// Protected Route Component
+// Protected Route Component for Admin/Staff
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   const user = authAPI.getUser();
   
@@ -22,6 +23,17 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   
   if (allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
     return <Navigate to="/login" replace />;
+  }
+  
+  return children;
+};
+
+// Protected Route for Organizer Portal
+const OrganizerRoute = ({ children }) => {
+  const isAuthenticated = localStorage.getItem('organizerAuth');
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/organizer-login" replace />;
   }
   
   return children;
@@ -55,6 +67,9 @@ function App() {
         <Route path="/pass/:registrationId" element={<Pass />} />
         <Route path="/verify" element={<Verify />} />
         <Route path="/login" element={<Login />} />
+        
+        {/* Organizer Portal Routes */}
+        <Route path="/7sports-academy-register" element={<SportsAcademyRegister />} />
         
         {/* Admin Routes */}
         <Route 

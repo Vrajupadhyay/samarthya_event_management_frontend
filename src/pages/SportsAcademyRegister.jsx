@@ -1,15 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { registrationAPI } from '../services/api';
+import { registrationAPI, promocodeAPI } from '../services/api';
 import QRCode from 'qrcode';
 import './Register.css';
 
-const Register = () => {
+const SportsAcademyRegister = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [registrationOpen, setRegistrationOpen] = useState(true);
   const [checkingStatus, setCheckingStatus] = useState(true);
   const [error, setError] = useState('');
+  const [promocodeLoading, setPromocodeLoading] = useState(false);
+  const [promocodeData, setPromocodeData] = useState(null);
+  const [promocodeInput, setPromocodeInput] = useState('');
   const [paymentQRCode, setPaymentQRCode] = useState('');
   const [paymentUPIURL, setPaymentUPIURL] = useState('');
   
@@ -24,14 +27,12 @@ const Register = () => {
       setRegistrationOpen(response.data.isOpen);
     } catch (err) {
       console.error('Failed to check registration status:', err);
-      // If check fails, assume it's open (fallback)
       setRegistrationOpen(true);
     } finally {
       setCheckingStatus(false);
     }
   };
   
-  // Initialize with Individual type by default
   const [formData, setFormData] = useState({
     type: 'Individual',
     firstName: '',
@@ -40,6 +41,8 @@ const Register = () => {
     email: '',
     gender: 'Male',
     paymentMode: 'Cash',
+    promocode: '',
+    organizer: '7 Sports Academy', // Track organizer
     additionalMembers: []
   });
 
@@ -56,8 +59,6 @@ const Register = () => {
     setFormData(prev => ({
       ...prev,
       type,
-      // For Individual: no additional members (total 1 person)
-      // For Couple: automatically add 1 member (total 2 persons)
       additionalMembers: type === 'Individual' 
         ? []
         : type === 'Couple' 
@@ -75,6 +76,44 @@ const Register = () => {
     }));
   };
 
+  const validatePromocode = async () => {
+    if (!promocodeInput.trim()) {
+      setError('Please enter a promocode');
+      return;
+    }
+
+    setPromocodeLoading(true);
+    setError('');
+
+    try {
+      const result = await promocodeAPI.validate(promocodeInput.trim());
+
+      if (result.success) {
+        setPromocodeData(result.data);
+        setFormData(prev => ({ ...prev, promocode: result.data.code }));
+        setError('');
+      } else {
+        setPromocodeData(null);
+        setFormData(prev => ({ ...prev, promocode: '' }));
+        setError(result.message || 'Invalid promocode');
+      }
+    } catch (err) {
+      console.error('Error validating promocode:', err);
+      setPromocodeData(null);
+      setFormData(prev => ({ ...prev, promocode: '' }));
+      setError(err.message || 'Failed to validate promocode');
+    } finally {
+      setPromocodeLoading(false);
+    }
+  };
+
+  const removePromocode = () => {
+    setPromocodeData(null);
+    setPromocodeInput('');
+    setFormData(prev => ({ ...prev, promocode: '' }));
+    setError('');
+  };
+
   const validateForm = () => {
     if (!formData.firstName.trim()) return 'First name is required';
     if (!formData.lastName.trim()) return 'Last name is required';
@@ -83,7 +122,6 @@ const Register = () => {
     if (!formData.email.trim()) return 'Email is required';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) return 'Invalid email address';
     
-    // For Couple: must have exactly 1 additional member (total 2)
     if (formData.type === 'Couple' && formData.additionalMembers.length !== 1) {
       return 'Couple registration requires 2 members total';
     }
@@ -114,7 +152,24 @@ const Register = () => {
       const response = await registrationAPI.create(formData);
       
       if (response.success) {
-        navigate(`/success/${response.data.ticketId}`);
+        // Show success message and reset form
+        alert(`✅ Registration successful!\n\nTicket ID: ${response.data.ticketId}\n\nUser will receive confirmation via email and WhatsApp.`);
+        
+        // Reset form for next registration
+        setFormData({
+          type: 'Individual',
+          firstName: '',
+          lastName: '',
+          mobile: '',
+          email: '',
+          gender: 'Male',
+          paymentMode: 'Cash',
+          promocode: '',
+          organizer: '7 Sports Academy',
+          additionalMembers: []
+        });
+        setPromocodeData(null);
+        setPromocodeInput('');
       }
     } catch (err) {
       setError(err.message || 'Registration failed. Please try again.');
@@ -123,30 +178,29 @@ const Register = () => {
     }
   };
 
-  // Calculate amount based on registration type
+  // Calculate amount based on promocode or default prices
   const getAmount = () => {
+    if (promocodeData) {
+      return formData.type === 'Individual' ? promocodeData.individualPrice : promocodeData.couplePrice;
+    }
     return formData.type === 'Individual' ? 1149 : 1999;
   };
 
   const amount = getAmount();
+  const originalAmount = formData.type === 'Individual' ? 1149 : 1999;
+  const discount = originalAmount - amount;
 
   // Generate UPI QR Code whenever amount or payment mode changes
   useEffect(() => {
     const generateUPIQRCode = async () => {
       if (formData.paymentMode === 'Online') {
         try {
-          // UPI Payment URL format
           const upiID = '8866793934@ybl';
           const payeeName = 'BEAT BLAZE 2025';
           const upiURL = `upi://pay?pa=${upiID}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR&tn=${encodeURIComponent('Event Registration')}`;
           
-          console.log('✅ Generated UPI URL:', upiURL);
-          console.log('💰 Payment Amount:', amount);
-          
-          // Store UPI URL for direct payment link
           setPaymentUPIURL(upiURL);
           
-          // Generate QR code as data URL
           const qrCodeDataURL = await QRCode.toDataURL(upiURL, {
             width: 300,
             margin: 2,
@@ -157,12 +211,10 @@ const Register = () => {
           });
           
           setPaymentQRCode(qrCodeDataURL);
-          console.log('✅ QR Code generated successfully');
         } catch (err) {
           console.error('❌ Error generating UPI QR code:', err);
         }
       } else {
-        // Clear payment data when switching to Cash
         setPaymentUPIURL('');
         setPaymentQRCode('');
       }
@@ -174,9 +226,12 @@ const Register = () => {
   return (
     <div className="register-container">
       <div className="register-header">
-        <Link to="/" className="back-button">← Back to Home</Link>
-        <h1>Event Registration</h1>
+        <h1>7 Sports Academy - Registration Portal</h1>
         <p>31st December BEAT BLAZE 2025</p>
+        <div className="organizer-badge">
+          <span className="badge-icon">🏟️</span>
+          <span>Organizer Portal - 7 Sports Academy</span>
+        </div>
       </div>
 
       <div className="register-content">
@@ -192,24 +247,9 @@ const Register = () => {
             <p className="closed-message">
               Registration for BEAT BLAZE 2025 is currently closed.
             </p>
-            <div className="contact-info">
-              <h3>For queries, contact:</h3>
-              <div className="contact-details">
-                <div className="contact-item">
-                  <span className="contact-label">📧 Email:</span>
-                  <a href="mailto:samarthyaevents07@gmail.com">samarthyaevents07@gmail.com</a>
-                </div>
-                <div className="contact-item">
-                  <span className="contact-label">📞 Phone:</span>
-                  <a href="tel:+919173864156">+91 9173864156</a>
-                </div>
-                <div className="contact-item">
-                  {/* <span className="contact-label">🎪 Organizer:</span> */}
-                  <span>Samarthya Events <br /> Devang Rathod</span>
-                </div>
-              </div>
-            </div>
-            <Link to="/" className="back-home-btn">← Back to Home</Link>
+            <Link to="/" className="back-home-btn">
+              Back to Home
+            </Link>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="register-form">
@@ -373,12 +413,6 @@ const Register = () => {
               <h3>💳 Online Payment</h3>
               <div className="payment-qr-container">
                 <div className="payment-instructions">
-                  {/* <div className="info-banner">
-                    <span className="info-icon">ℹ️</span>
-                    <span>Pay ₹{amount.toLocaleString()} via UPI</span>
-                  </div> */}
-                  
-                  {/* Copy UPI ID Button */}
                   <div className="payment-action">
                     <div className="upi-copy-section">
                       <p className="upi-label">UPI ID:</p>
@@ -396,7 +430,6 @@ const Register = () => {
                           onClick={() => {
                             const upiId = '8866793934@ybl';
                             navigator.clipboard.writeText(upiId).then(() => {
-                              // Show success feedback
                               const btn = document.querySelector('.copy-upi-btn');
                               const originalText = btn.innerHTML;
                               btn.innerHTML = '✅ Copied!';
@@ -443,14 +476,6 @@ const Register = () => {
                       </div>
                     )}
                   </div>
-                  {/* <div className="payment-amount-highlight">
-                    <span>Pay Amount:</span>
-                    <strong>₹{amount.toLocaleString()}</strong>
-                  </div> */}
-                  {/* <div className="upi-details">
-                    <p className="upi-id">UPI ID: <strong>8866793934@ybl</strong></p>
-                    <p className="upi-hint">Click "Pay Now" or scan QR to pay ₹{amount.toLocaleString()}</p>
-                  </div> */}
                 </div>
               </div>
               
@@ -466,6 +491,67 @@ const Register = () => {
               </div>
             </div>
           )}
+
+          {/* Promocode Section */}
+          <div className="form-section">
+            <h3>🎁 Promocode (Optional)</h3>
+            {!promocodeData ? (
+              <div className="promocode-input-section">
+                <div className="form-group">
+                  <label>Have a promocode?</label>
+                  <div className="promocode-input-wrapper">
+                    <input
+                      type="text"
+                      value={promocodeInput}
+                      onChange={(e) => setPromocodeInput(e.target.value.toUpperCase())}
+                      placeholder="Enter promocode"
+                      className="promocode-input"
+                      disabled={promocodeLoading}
+                    />
+                    <button
+                      type="button"
+                      onClick={validatePromocode}
+                      className="validate-promocode-btn"
+                      disabled={promocodeLoading || !promocodeInput.trim()}
+                    >
+                      {promocodeLoading ? 'Checking...' : 'Apply'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="promocode-applied">
+                <div className="promocode-success">
+                  <span className="success-icon">✅</span>
+                  <div className="success-details">
+                    <strong>Promocode Applied: {promocodeData.code}</strong>
+                    <p>Remaining uses: {promocodeData.remaining}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={removePromocode}
+                    className="remove-promocode-btn"
+                  >
+                    Remove
+                  </button>
+                </div>
+                <div className="price-breakdown">
+                  <div className="price-row">
+                    <span>Original Price:</span>
+                    <span className="original-price">₹{originalAmount.toLocaleString()}</span>
+                  </div>
+                  <div className="price-row discount">
+                    <span>Discount:</span>
+                    <span>-₹{discount.toLocaleString()}</span>
+                  </div>
+                  <div className="price-row final">
+                    <span>Final Price:</span>
+                    <strong>₹{amount.toLocaleString()}</strong>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Summary */}
           <div className="form-section summary-section">
@@ -483,6 +569,12 @@ const Register = () => {
                 <span>Payment Mode:</span>
                 <strong>{formData.paymentMode}</strong>
               </div>
+              {promocodeData && (
+                <div className="summary-item">
+                  <span>Promocode:</span>
+                  <strong className="promo-code-highlight">{promocodeData.code}</strong>
+                </div>
+              )}
               <div className="summary-item total">
                 <span>Total Amount:</span>
                 <strong>₹{amount.toLocaleString()}</strong>
@@ -512,7 +604,7 @@ const Register = () => {
           </button>
 
           <p className="form-note">
-            * After registration, you will receive a confirmation email and WhatsApp message with your QR code for entry.
+            * User will receive confirmation email and WhatsApp message with QR code for entry.
           </p>
         </form>
         )}
@@ -552,4 +644,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default SportsAcademyRegister;
