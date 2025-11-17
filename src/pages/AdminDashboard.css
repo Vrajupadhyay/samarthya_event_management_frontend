@@ -1096,3 +1096,66 @@ button:disabled {
     min-width: unset;
   }
 }
+
+/* Registration Toggle Button */
+.btn-toggle {
+  padding: 0.75rem 1.5rem;
+  border: 2px solid;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-toggle:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn-open {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+  border-color: #28a745;
+}
+
+.btn-open:hover:not(:disabled) {
+  background: linear-gradient(135deg, #20c997, #17a2b8);
+  border-color: #17a2b8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+}
+
+.btn-closed {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  color: white;
+  border-color: #dc3545;
+}
+
+.btn-closed:hover:not(:disabled) {
+  background: linear-gradient(135deg, #c82333, #bd2130);
+  border-color: #bd2130;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .header-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  .btn-toggle {
+    width: 100%;
+    font-size: 0.85rem;
+    padding: 0.7rem 1rem;
+  }
+
+  .btn-secondary,
+  .btn-danger {
+    width: 100%;
+  }
+}

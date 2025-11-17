@@ -102,7 +102,7 @@ const Pass = () => {
           <p className="pass-subtitle">New Year's Eve Celebration</p>
           <div className="pass-date">
             <span className="date-icon">📅</span>
-            <span>31st December 2025 | 7:00 PM Onwards</span>
+            <span>31st December 2025 | 6:45 PM Onwards</span>
           </div>
         </div>
 

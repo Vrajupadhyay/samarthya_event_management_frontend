@@ -9,6 +9,8 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [statistics, setStatistics] = useState(null);
   const [registrations, setRegistrations] = useState([]);
+  const [registrationOpen, setRegistrationOpen] = useState(true);
+  const [toggleLoading, setToggleLoading] = useState(false);
   const [activeView, setActiveView] = useState('registrations'); // New state for view toggle
   const [filters, setFilters] = useState({
     status: '',
@@ -26,6 +28,7 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     fetchData();
+    fetchRegistrationStatus();
   }, [filters]);
 
   // Close WhatsApp dropdown when clicking outside
@@ -54,6 +57,37 @@ const AdminDashboard = () => {
       console.error('Error fetching data:', error);
       alert(error.message);
       setLoading(false);
+    }
+  };
+
+  const fetchRegistrationStatus = async () => {
+    try {
+      const response = await adminAPI.getRegistrationStatus();
+      setRegistrationOpen(response.data.isOpen);
+    } catch (error) {
+      console.error('Error fetching registration status:', error);
+    }
+  };
+
+  const handleToggleRegistration = async () => {
+    const confirmMessage = registrationOpen 
+      ? 'Are you sure you want to CLOSE registration? Users will not be able to register.'
+      : 'Are you sure you want to OPEN registration? Users will be able to register.';
+    
+    if (!confirm(confirmMessage)) {
+      return;
+    }
+
+    setToggleLoading(true);
+    try {
+      await adminAPI.toggleRegistrationStatus(!registrationOpen);
+      setRegistrationOpen(!registrationOpen);
+      alert(`Registration ${!registrationOpen ? 'opened' : 'closed'} successfully!`);
+    } catch (error) {
+      console.error('Error toggling registration:', error);
+      alert(error.message || 'Failed to toggle registration status');
+    } finally {
+      setToggleLoading(false);
     }
   };
 
@@ -261,6 +295,19 @@ const AdminDashboard = () => {
         <div className="header-content">
           <h1>🎉 Admin Dashboard</h1>
           <div className="header-actions">
+            <button 
+              onClick={handleToggleRegistration} 
+              className={`btn-toggle ${registrationOpen ? 'btn-open' : 'btn-closed'}`}
+              disabled={toggleLoading}
+            >
+              {toggleLoading ? (
+                <>⏳ Processing...</>
+              ) : registrationOpen ? (
+                <>🔓 Registration Open - Click to Close</>
+              ) : (
+                <>🔒 Registration Closed - Click to Open</>
+              )}
+            </button>
             <button onClick={handleExport} className="btn-secondary">
               📊 Export CSV
             </button>

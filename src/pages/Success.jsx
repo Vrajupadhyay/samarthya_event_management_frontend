@@ -169,7 +169,7 @@ const Success = () => {
                 </div>
                 <div className="detail-row">
                   <span className="detail-icon">🕖</span>
-                  <span className="detail-text">7:00 PM onwards</span>
+                  <span className="detail-text">6:45 PM onwards</span>
                 </div>
                 <div className="detail-row">
                   <span className="detail-icon">📍</span>

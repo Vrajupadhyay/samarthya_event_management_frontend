@@ -163,7 +163,7 @@ const Home = () => {
               <div className="detail-icon-large">📅</div>
               <h3>Date & Time</h3>
               <p>31st December 2025</p>
-              <p className="detail-highlight">7:00 PM onwards</p>
+              <p className="detail-highlight">6:45 PM onwards</p>
             </div>
             <div className="detail-card-modern">
               <div className="detail-icon-large">📍</div>
@@ -274,33 +274,85 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Terms & Conditions Section - Simplified Single Card */}
+      {/* Terms & Conditions Section - Modern Redesign */}
       <section className="terms-section">
         <div className="container">
           <div className="section-header">
             <h2 className="section-title">Terms & Conditions</h2>
-            <p className="section-subtitle">Please read carefully before registering</p>
+            <p className="section-subtitle">Important guidelines for all attendees</p>
           </div>
-          <div className="terms-content-simple">
-            <div className="terms-card-unified">
-              <ul className="terms-list-simple">
+          
+          {/* Important Notice Banner */}
+          <div className="terms-notice-banner">
+            {/* <div className="notice-icon">⚠️</div> */}
+            <div className="notice-content">
+              <h3>Please Read Carefully</h3>
+              <p>By registering, you agree to abide by all terms and conditions listed below</p>
+            </div>
+          </div>
+
+          {/* Terms Grid - Categorized */}
+          <div className="terms-modern-grid">
+            {/* Registration & Entry */}
+            <div className="term-category-card">
+              <div className="term-category-header">
+                <span className="term-icon">🎫</span>
+                <h3>Registration & Entry</h3>
+              </div>
+              <ul className="term-list">
                 <li>Registration confirmation will be sent via email with QR code</li>
                 <li>QR code is mandatory for entry (digital or printed)</li>
                 <li>Entry only with valid QR code and ID proof</li>
+                <li>Tickets are non-transferable</li>
+              </ul>
+            </div>
+
+            {/* Payment & Refunds */}
+            <div className="term-category-card">
+              <div className="term-category-header">
+                <span className="term-icon">💳</span>
+                <h3>Payment & Refunds</h3>
+              </div>
+              <ul className="term-list">
                 <li>Full payment required to confirm registration</li>
                 <li>Registration once confirmed is non-refundable</li>
-                <li>Tickets are non-transferable</li>
+                <li>No cancellations or refunds under any circumstances</li>
+              </ul>
+            </div>
+
+            {/* Event Rules */}
+            <div className="term-category-card">
+              <div className="term-category-header">
+                <span className="term-icon">📜</span>
+                <h3>Event Rules</h3>
+              </div>
+              <ul className="term-list">
                 <li>Alcohol is strictly prohibited at the event</li>
                 <li>Outside food and beverages strictly prohibited</li>
                 <li>Security check mandatory at entry</li>
                 <li>Management reserves the right to deny entry</li>
+              </ul>
+            </div>
+
+            {/* Liability & Privacy */}
+            <div className="term-category-card">
+              <div className="term-category-header">
+                <span className="term-icon">🛡️</span>
+                <h3>Liability & Privacy</h3>
+              </div>
+              <ul className="term-list">
                 <li>Organizers not responsible for lost belongings</li>
                 <li>Event photos may be used for promotional purposes</li>
-                <li>Organizers reserve the right to remove any attendee from the event for misconduct or nuisance without refund</li>
+                <li>Organizers reserve the right to remove any attendee for misconduct without refund</li>
               </ul>
-              <div className="terms-footer-note">
-                <p>By registering, you agree to abide by all terms and conditions. Organizers reserve the right to make changes without prior notice.</p>
-              </div>
+            </div>
+          </div>
+
+          {/* Agreement Footer */}
+          <div className="terms-agreement-footer">
+            <div className="agreement-box">
+              <span className="agreement-icon">✓</span>
+              <p>By clicking "Register Now", you acknowledge that you have read, understood, and agree to be bound by these terms and conditions. The organizers reserve the right to make changes without prior notice.</p>
             </div>
           </div>
         </div>
@@ -328,7 +380,7 @@ const Home = () => {
               <p>31st December BEAT BLAZE 2025</p>
               {/* <p>Premium Event Venue</p> */}
               <p>7 Sports Academy, Rampura, Bakrol, Anand, Gujarat</p>
-              <p>7:00 PM onwards</p>
+              <p>6:45 PM onwards</p>
             </div>
             <div className="footer-section">
               <h4>Contact Us</h4>
@@ -338,25 +390,50 @@ const Home = () => {
             <div className="footer-section">
               <h4>Quick Links</h4>
               <p><Link to="/register" style={{color: '#ffd700', textDecoration: 'none'}}>Register Now</Link></p>
-              <p><Link to="/verify" style={{color: '#ffd700', textDecoration: 'none'}}>Retrieve Your Pass</Link></p>
-              <p><Link to="/scanner" style={{color: '#ffd700', textDecoration: 'none'}}>Scan QR Code</Link></p>
+              {/* <p><Link to="/verify" style={{color: '#ffd700', textDecoration: 'none'}}>Retrieve Your Pass</Link></p>
+              <p><Link to="/scanner" style={{color: '#ffd700', textDecoration: 'none'}}>Scan QR Code</Link></p> */}
               <p><Link to="/login" style={{color: '#ffd700', textDecoration: 'none'}}>Admin Login</Link></p>
             </div>
             <div className="footer-section">
               <h4>Organized By</h4>
               <p>7 Sports Academy</p>
               <p>Samarthya Events</p>
-              {/* <p style={{marginTop: '1rem', fontSize: '0.85rem', color: 'rgba(255,255,255,0.5)'}}>In association with event partners</p> */}
-            </div>
-          </div>
-          <div className="footer-bottom">
-            <p>&copy; 2025 BEAT BLAZE Event. All rights reserved.</p>
-            <div className="footer-links">
-              <Link to="/login">Staff/Admin Login</Link>
             </div>
           </div>
         </div>
       </footer>
+
+      {/* Developer Footer */}
+      <div className="developer-footer">
+        <div className="developer-content">
+          <p className="developer-text">Developed by <strong>Vraj Upadhyay</strong></p>
+          <div className="developer-links">
+            <a 
+              href="https://www.linkedin.com/in/vrajupadhyay/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="social-link linkedin"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+              </svg>
+              LinkedIn
+            </a>
+            <a 
+              href="https://www.instagram.com/vraj_upadhyay12/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="social-link instagram"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              </svg>
+              Instagram
+            </a>
+          </div>
+          <p className="copyright-text">&copy; 2025 BEAT BLAZE Event. All rights reserved.</p>
+        </div>
+      </div>
     </div>
   );
 };

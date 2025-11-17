@@ -88,6 +88,24 @@ export const authAPI = {
 
 // Registration API
 export const registrationAPI = {
+  checkStatus: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/register/status/check`, {
+        credentials: 'include',
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to check status');
+      }
+      
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   create: async (registrationData) => {
     try {
       const response = await fetch(`${API_BASE_URL}/register`, {
@@ -154,6 +172,51 @@ export const registrationAPI = {
 
 // Admin API
 export const adminAPI = {
+  getRegistrationStatus: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/settings/registration-status`, {
+        headers: {
+          ...getAuthHeaders(),
+        },
+        credentials: 'include',
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to fetch registration status');
+      }
+      
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  toggleRegistrationStatus: async (isOpen) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/admin/settings/registration-status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeaders(),
+        },
+        credentials: 'include',
+        body: JSON.stringify({ isOpen }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to toggle registration status');
+      }
+      
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   getStatistics: async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/admin/statistics`, {
