@@ -220,6 +220,28 @@
   box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2), 0 4px 12px rgba(255, 215, 0, 0.3);
 }
 
+/* Autofill Styles - Fix Yellow Background & White Text Visibility */
+.form-group input:-webkit-autofill,
+.form-group input:-webkit-autofill:hover,
+.form-group input:-webkit-autofill:focus,
+.form-group input:-webkit-autofill:active,
+.form-group select:-webkit-autofill,
+.form-group select:-webkit-autofill:hover,
+.form-group select:-webkit-autofill:focus,
+.form-group select:-webkit-autofill:active,
+.form-group textarea:-webkit-autofill,
+.form-group textarea:-webkit-autofill:hover,
+.form-group textarea:-webkit-autofill:focus,
+.form-group textarea:-webkit-autofill:active {
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0 1000px rgba(26, 26, 46, 0.95) inset !important;
+  box-shadow: 0 0 0 1000px rgba(26, 26, 46, 0.95) inset !important;
+  border: 1.5px solid rgba(255, 215, 0, 0.4) !important;
+  background-color: rgba(26, 26, 46, 0.95) !important;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: #ffffff;
+}
+
 /* Ticket Status Styles */
 .form-group input.input-success {
   border-color: #4caf50;
@@ -900,6 +922,20 @@
   background: rgba(255, 255, 255, 0.08);
 }
 
+/* Promocode Input Autofill Fix */
+.promocode-input:-webkit-autofill,
+.promocode-input:-webkit-autofill:hover,
+.promocode-input:-webkit-autofill:focus,
+.promocode-input:-webkit-autofill:active {
+  -webkit-text-fill-color: #ffffff !important;
+  -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.05) inset !important;
+  box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0.05) inset !important;
+  border: 2px solid rgba(255, 215, 0, 0.3) !important;
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: #ffffff;
+}
+
 .validate-promocode-btn {
   padding: 0.75rem 1.5rem;
   background: linear-gradient(135deg, #ffd700, #ffed4e);
@@ -1496,6 +1532,20 @@
   outline: none;
   border-color: #ffd700;
   box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+}
+
+/* UPI Input Autofill Fix */
+.upi-id-input:-webkit-autofill,
+.upi-id-input:-webkit-autofill:hover,
+.upi-id-input:-webkit-autofill:focus,
+.upi-id-input:-webkit-autofill:active {
+  -webkit-text-fill-color: #ffd700 !important;
+  -webkit-box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.4) inset !important;
+  box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.4) inset !important;
+  border: 2px solid rgba(255, 215, 0, 0.3) !important;
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: #ffd700;
 }
 
 .copy-upi-btn {
