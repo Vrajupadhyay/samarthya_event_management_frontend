@@ -240,7 +240,7 @@ const Home = () => {
               <h3 className="price-title">Individual</h3>
               <div className="price-amount-wrapper">
                 <span className="price-currency">₹</span>
-                <span className="price-amount">1,150</span>
+                <span className="price-amount">1,149</span>
               </div>
               <p className="price-per-person">Solo Entry</p>
             </div>
@@ -254,7 +254,7 @@ const Home = () => {
               <h3 className="price-title">Couple</h3>
               <div className="price-amount-wrapper">
                 <span className="price-currency">₹</span>
-                <span className="price-amount">2,000</span>
+                <span className="price-amount">1,999</span>
               </div>
               <p className="price-per-person">For 2 person</p>
             </div>

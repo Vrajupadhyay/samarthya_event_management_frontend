@@ -272,7 +272,7 @@ const Register = () => {
                   <h4>Individual</h4>
                   <p className="type-desc">For 1 person</p>
                 </div>
-                <p className="type-price">₹1,150</p>
+                <p className="type-price">₹1,149</p>
               </div>
               <div
                 className={`type-option ${formData.type === 'Couple' ? 'active' : ''}`}
@@ -282,7 +282,7 @@ const Register = () => {
                   <h4>Couple</h4>
                   <p className="type-desc">For 2 persons</p>
                 </div>
-                <p className="type-price">₹2,000</p>
+                <p className="type-price">₹1,999</p>
               </div>
             </div>
           </div>
