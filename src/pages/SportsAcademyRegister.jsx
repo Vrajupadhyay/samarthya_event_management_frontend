@@ -42,7 +42,6 @@ const SportsAcademyRegister = () => {
     gender: 'Male',
     paymentMode: 'Cash',
     promocode: '',
-    organizer: '7 Sports Academy', // Track organizer
     additionalMembers: []
   });
 
@@ -165,7 +164,6 @@ const SportsAcademyRegister = () => {
           gender: 'Male',
           paymentMode: 'Cash',
           promocode: '',
-          organizer: '7 Sports Academy',
           additionalMembers: []
         });
         setPromocodeData(null);
@@ -189,6 +187,13 @@ const SportsAcademyRegister = () => {
   const amount = getAmount();
   const originalAmount = formData.type === 'Individual' ? 1149 : 1999;
   const discount = originalAmount - amount;
+
+  // Auto-set payment mode to Cash when registration is free
+  useEffect(() => {
+    if (amount === 0 && formData.paymentMode === 'Online') {
+      setFormData(prev => ({ ...prev, paymentMode: 'Cash' }));
+    }
+  }, [amount, formData.paymentMode]);
 
   // Generate UPI QR Code whenever amount or payment mode changes
   useEffect(() => {
@@ -226,12 +231,8 @@ const SportsAcademyRegister = () => {
   return (
     <div className="register-container">
       <div className="register-header">
-        <h1>7 Sports Academy - Registration Portal</h1>
+        <h1>Event Registration</h1>
         <p>31st December BEAT BLAZE 2025</p>
-        <div className="organizer-badge">
-          <span className="badge-icon">🏟️</span>
-          <span>Organizer Portal - 7 Sports Academy</span>
-        </div>
       </div>
 
       <div className="register-content">
@@ -265,7 +266,22 @@ const SportsAcademyRegister = () => {
                   <h4>Individual</h4>
                   <p className="type-desc">For 1 person</p>
                 </div>
-                <p className="type-price">₹1,149</p>
+                <p className="type-price">
+                  {promocodeData ? (
+                    <>
+                      {promocodeData.individualPrice === 0 ? (
+                        <span className="free-price">FREE</span>
+                      ) : (
+                        <>
+                          <span className="original-price-small">₹1,149</span>
+                          <span className="discounted-price">₹{promocodeData.individualPrice}</span>
+                        </>
+                      )}
+                    </>
+                  ) : (
+                    '₹1,149'
+                  )}
+                </p>
               </div>
               <div
                 className={`type-option ${formData.type === 'Couple' ? 'active' : ''}`}
@@ -275,7 +291,22 @@ const SportsAcademyRegister = () => {
                   <h4>Couple</h4>
                   <p className="type-desc">For 2 persons</p>
                 </div>
-                <p className="type-price">₹1,999</p>
+                <p className="type-price">
+                  {promocodeData ? (
+                    <>
+                      {promocodeData.couplePrice === 0 ? (
+                        <span className="free-price">FREE</span>
+                      ) : (
+                        <>
+                          <span className="original-price-small">₹1,999</span>
+                          <span className="discounted-price">₹{promocodeData.couplePrice}</span>
+                        </>
+                      )}
+                    </>
+                  ) : (
+                    '₹1,999'
+                  )}
+                </p>
               </div>
             </div>
           </div>
@@ -349,10 +380,16 @@ const SportsAcademyRegister = () => {
                   value={formData.paymentMode}
                   onChange={handleChange}
                   required
+                  disabled={amount === 0}
                 >
                   <option value="Cash">Cash</option>
                   <option value="Online">Online</option>
                 </select>
+                {amount === 0 && (
+                  <p className="payment-free-note">
+                    💚 No payment required - Free registration
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -408,7 +445,7 @@ const SportsAcademyRegister = () => {
           )}
 
           {/* PhonePe Payment QR Code Section */}
-          {formData.paymentMode === 'Online' && (
+          {formData.paymentMode === 'Online' && amount > 0 && (
             <div className="form-section payment-section">
               <h3>💳 Online Payment</h3>
               <div className="payment-qr-container">
@@ -504,7 +541,7 @@ const SportsAcademyRegister = () => {
                       type="text"
                       value={promocodeInput}
                       onChange={(e) => setPromocodeInput(e.target.value.toUpperCase())}
-                      placeholder="Enter promocode"
+                      placeholder="Enter promocode for discount or free registration"
                       className="promocode-input"
                       disabled={promocodeLoading}
                     />
@@ -535,20 +572,34 @@ const SportsAcademyRegister = () => {
                     Remove
                   </button>
                 </div>
-                <div className="price-breakdown">
-                  <div className="price-row">
-                    <span>Original Price:</span>
-                    <span className="original-price">₹{originalAmount.toLocaleString()}</span>
+                
+                {amount === 0 ? (
+                  /* Free Registration Display */
+                  <div className="free-registration-banner">
+                    <h3>FREE REGISTRATION</h3>
+                    {/* <p>This promocode grants you complimentary access!</p> */}
+                    <div className="free-details">
+                      <p>For: Special Guests</p>
+                      <p>Registration Fee: <strong className="free-amount">FREE (₹0)</strong></p>
+                    </div>
                   </div>
-                  <div className="price-row discount">
-                    <span>Discount:</span>
-                    <span>-₹{discount.toLocaleString()}</span>
+                ) : (
+                  /* Discounted Price Display */
+                  <div className="price-breakdown">
+                    <div className="price-row">
+                      <span>Original Price:</span>
+                      <span className="original-price">₹{originalAmount.toLocaleString()}</span>
+                    </div>
+                    <div className="price-row discount">
+                      <span>Discount:</span>
+                      <span>-₹{discount.toLocaleString()}</span>
+                    </div>
+                    <div className="price-row final">
+                      <span>Final Price:</span>
+                      <strong>₹{amount.toLocaleString()}</strong>
+                    </div>
                   </div>
-                  <div className="price-row final">
-                    <span>Final Price:</span>
-                    <strong>₹{amount.toLocaleString()}</strong>
-                  </div>
-                </div>
+                )}
               </div>
             )}
           </div>
@@ -577,7 +628,9 @@ const SportsAcademyRegister = () => {
               )}
               <div className="summary-item total">
                 <span>Total Amount:</span>
-                <strong>₹{amount.toLocaleString()}</strong>
+                <strong className={amount === 0 ? 'free-amount' : ''}>
+                  {amount === 0 ? 'FREE (₹0)' : `₹${amount.toLocaleString()}`}
+                </strong>
               </div>
             </div>
           </div>
