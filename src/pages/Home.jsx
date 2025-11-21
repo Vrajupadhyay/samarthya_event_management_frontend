@@ -462,6 +462,15 @@ const Home = () => {
               </svg>
               Instagram
             </a>
+            <a 
+              href="https://vrajupadhyay.netlify.app" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="social-link portfolio"
+            >
+              🌐 
+              Website
+            </a>
           </div>
           <p className="copyright-text">&copy; 2025 BEAT BLAZE Event. All rights reserved.</p>
         </div>
