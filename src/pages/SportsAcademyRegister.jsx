@@ -47,7 +47,7 @@ const SportsAcademyRegister = () => {
     mobile: '',
     email: '',
     gender: 'Male',
-    paymentMode: 'Cash',
+    paymentMode: 'Online',
     promocode: '',
     additionalMembers: []
   });
@@ -169,7 +169,7 @@ const SportsAcademyRegister = () => {
           mobile: '',
           email: '',
           gender: 'Male',
-          paymentMode: 'Cash',
+          paymentMode: 'Online',
           promocode: '',
           additionalMembers: []
         });
@@ -195,17 +195,10 @@ const SportsAcademyRegister = () => {
   const originalAmount = formData.type === 'Individual' ? 1149 : 1999;
   const discount = originalAmount - amount;
 
-  // Auto-set payment mode to Cash when registration is free
-  useEffect(() => {
-    if (amount === 0 && formData.paymentMode === 'Online') {
-      setFormData(prev => ({ ...prev, paymentMode: 'Cash' }));
-    }
-  }, [amount, formData.paymentMode]);
-
-  // Generate UPI QR Code whenever amount or payment mode changes
+  // Generate UPI QR Code whenever amount changes
   useEffect(() => {
     const generateUPIQRCode = async () => {
-      if (formData.paymentMode === 'Online') {
+      if (amount > 0) {
         try {
           const upiID = '8866793934@ybl';
           const payeeName = 'BEAT BLAZE 2025';
@@ -233,7 +226,7 @@ const SportsAcademyRegister = () => {
     };
 
     generateUPIQRCode();
-  }, [amount, formData.paymentMode]);
+  }, [amount]);
 
   return (
     <div className="register-container">
@@ -389,7 +382,6 @@ const SportsAcademyRegister = () => {
                   required
                   disabled={amount === 0}
                 >
-                  <option value="Cash">Cash</option>
                   <option value="Online">Online</option>
                 </select>
                 {amount === 0 && (
@@ -452,7 +444,7 @@ const SportsAcademyRegister = () => {
           )}
 
           {/* PhonePe Payment QR Code Section */}
-          {formData.paymentMode === 'Online' && amount > 0 && (
+          {amount > 0 && (
             <div className="form-section payment-section">
               <h3>💳 Online Payment</h3>
               <div className="payment-qr-container">

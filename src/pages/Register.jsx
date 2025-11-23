@@ -46,7 +46,7 @@ const Register = () => {
     mobile: '',
     email: '',
     gender: 'Male',
-    paymentMode: 'Cash',
+    paymentMode: 'Online',
     additionalMembers: []
   });
 
@@ -137,46 +137,40 @@ const Register = () => {
 
   const amount = getAmount();
 
-  // Generate UPI QR Code whenever amount or payment mode changes
+  // Generate UPI QR Code whenever amount changes
   useEffect(() => {
     const generateUPIQRCode = async () => {
-      if (formData.paymentMode === 'Online') {
-        try {
-          // UPI Payment URL format
-          const upiID = '8866793934@ybl';
-          const payeeName = 'BEAT BLAZE 2025';
-          const upiURL = `upi://pay?pa=${upiID}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR&tn=${encodeURIComponent('Event Registration')}`;
-          
-          console.log('✅ Generated UPI URL:', upiURL);
-          console.log('💰 Payment Amount:', amount);
-          
-          // Store UPI URL for direct payment link
-          setPaymentUPIURL(upiURL);
-          
-          // Generate QR code as data URL
-          const qrCodeDataURL = await QRCode.toDataURL(upiURL, {
-            width: 300,
-            margin: 2,
-            color: {
-              dark: '#000000',
-              light: '#FFFFFF'
-            }
-          });
-          
-          setPaymentQRCode(qrCodeDataURL);
-          console.log('✅ QR Code generated successfully');
-        } catch (err) {
-          console.error('❌ Error generating UPI QR code:', err);
-        }
-      } else {
-        // Clear payment data when switching to Cash
-        setPaymentUPIURL('');
-        setPaymentQRCode('');
+      try {
+        // UPI Payment URL format
+        const upiID = '8866793934@ybl';
+        const payeeName = 'BEAT BLAZE 2025';
+        const upiURL = `upi://pay?pa=${upiID}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR&tn=${encodeURIComponent('Event Registration')}`;
+        
+        console.log('✅ Generated UPI URL:', upiURL);
+        console.log('💰 Payment Amount:', amount);
+        
+        // Store UPI URL for direct payment link
+        setPaymentUPIURL(upiURL);
+        
+        // Generate QR code as data URL
+        const qrCodeDataURL = await QRCode.toDataURL(upiURL, {
+          width: 300,
+          margin: 2,
+          color: {
+            dark: '#000000',
+            light: '#FFFFFF'
+          }
+        });
+        
+        setPaymentQRCode(qrCodeDataURL);
+        console.log('✅ QR Code generated successfully');
+      } catch (err) {
+        console.error('❌ Error generating UPI QR code:', err);
       }
     };
 
     generateUPIQRCode();
-  }, [amount, formData.paymentMode]);
+  }, [amount]);
 
   return (
     <div className="register-container">
@@ -317,7 +311,6 @@ const Register = () => {
                   onChange={handleChange}
                   required
                 >
-                  <option value="Cash">Cash</option>
                   <option value="Online">Online</option>
                 </select>
               </div>
@@ -375,8 +368,7 @@ const Register = () => {
           )}
 
           {/* PhonePe Payment QR Code Section */}
-          {formData.paymentMode === 'Online' && (
-            <div className="form-section payment-section">
+          <div className="form-section payment-section">
               <h3>💳 Online Payment</h3>
               <div className="payment-qr-container">
                 <div className="payment-instructions">
@@ -472,7 +464,6 @@ const Register = () => {
                 </p>
               </div>
             </div>
-          )}
 
           {/* Summary */}
           <div className="form-section summary-section">
