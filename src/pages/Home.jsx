@@ -242,11 +242,11 @@ const Home = () => {
               <h3>Valet Parking</h3>
               <p>Convenient valet parking service for all guests</p>
             </div>
-            <div className="facility-card-modern">
+            {/* <div className="facility-card-modern">
               <div className="facility-icon-large">🎆</div>
               <h3>Fireworks</h3>
               <p>Spectacular fireworks display at midnight</p>
-            </div>
+            </div> */}
             <div className="facility-card-modern">
               <div className="facility-icon-large">📸</div>
               <h3>Photo Booth</h3>
