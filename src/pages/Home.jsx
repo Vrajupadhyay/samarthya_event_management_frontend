@@ -10,6 +10,11 @@ const Home = () => {
     seconds: 0
   });
 
+  // Auto-redirect to GetYourTicket platform
+  useEffect(() => {
+    window.location.href = 'https://getyourticket.in/events/Vallabh-Vidyanagar/SAMARTHYA-EVENTS/Beat-Blaze-NYE-Party/AA00087';
+  }, []);
+
   useEffect(() => {
     // Calculate countdown to December 31, 2025
     const calculateTimeLeft = () => {
@@ -91,9 +96,14 @@ const Home = () => {
             </div>
           </div>
 
-          <button className="cta-button" onClick={scrollToRegister}>
+          <a 
+            href="https://getyourticket.in/events/Vallabh-Vidyanagar/SAMARTHYA-EVENTS/Beat-Blaze-NYE-Party/AA00087"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="cta-button"
+          >
             👉 Register Now
-          </button>
+          </a>
         </div>
       </section>
 
@@ -401,9 +411,14 @@ const Home = () => {
           <div className="register-cta">
             <h2>Ready to Join the Party?</h2>
             <p>Register now and secure your spot for the biggest New Year celebration!</p>
-            <Link to="/register" className="register-button">
+            <a 
+              href="https://getyourticket.in/events/Vallabh-Vidyanagar/SAMARTHYA-EVENTS/Beat-Blaze-NYE-Party/AA00087"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="register-button"
+            >
               🎫 Register Now
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -426,7 +441,7 @@ const Home = () => {
             </div>
             <div className="footer-section">
               <h4>Quick Links</h4>
-              <p><Link to="/register" style={{color: '#ffd700', textDecoration: 'none'}}>Register Now</Link></p>
+              <p><a href="https://getyourticket.in/events/Vallabh-Vidyanagar/SAMARTHYA-EVENTS/Beat-Blaze-NYE-Party/AA00087" target="_blank" rel="noopener noreferrer" style={{color: '#ffd700', textDecoration: 'none'}}>Register Now</a></p>
               {/* <p><Link to="/verify" style={{color: '#ffd700', textDecoration: 'none'}}>Retrieve Your Pass</Link></p>
               <p><Link to="/scanner" style={{color: '#ffd700', textDecoration: 'none'}}>Scan QR Code</Link></p> */}
               <p><Link to="/login" style={{color: '#ffd700', textDecoration: 'none'}}>Admin Login</Link></p>
