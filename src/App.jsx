@@ -13,6 +13,20 @@ import ScrollToTop from './components/ScrollToTop';
 import { authAPI } from './services/api';
 import './App.css';
 
+// Redirect Home Component - only redirects from root path
+const RedirectHome = () => {
+  useEffect(() => {
+    window.location.href = 'https://getyourticket.in/events/Vallabh-Vidyanagar/SAMARTHYA-EVENTS/Beat-Blaze-NYE-Party/AA00087';
+  }, []);
+  
+  return (
+    <div className="loading-screen">
+      <div className="loader"></div>
+      <p>Redirecting to ticket booking platform...</p>
+    </div>
+  );
+};
+
 // Protected Route Component for Admin/Staff
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   const user = authAPI.getUser();
@@ -61,15 +75,17 @@ function App() {
       <ScrollToTop />
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<RedirectHome />} />
         <Route path="/register" element={<Register />} />
         <Route path="/success/:registrationId" element={<Success />} />
         <Route path="/pass/:registrationId" element={<Pass />} />
         <Route path="/verify" element={<Verify />} />
         <Route path="/login" element={<Login />} />
         
-        {/* Organizer Portal Routes */}
+        {/* Organizer Portal Routes - Multiple URL variations */}
         <Route path="/7sports-academy-register" element={<SportsAcademyRegister />} />
+        <Route path="/7sports-acedamy-registration" element={<SportsAcademyRegister />} />
+        <Route path="/7sports-academy-registration" element={<SportsAcademyRegister />} />
         
         {/* Admin Routes */}
         <Route 
