@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './Home.css';
 
 const Home = () => {
+  const location = useLocation();
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -10,10 +11,13 @@ const Home = () => {
     seconds: 0
   });
 
-  // Auto-redirect to GetYourTicket platform
+  // Auto-redirect to GetYourTicket platform (only from home page, not from other routes)
   useEffect(() => {
-    window.location.href = 'https://getyourticket.in/events/Vallabh-Vidyanagar/SAMARTHYA-EVENTS/Beat-Blaze-NYE-Party/AA00087';
-  }, []);
+    // Check if we're on the exact home page path
+    if (location.pathname === '/') {
+      window.location.href = 'https://getyourticket.in/events/Vallabh-Vidyanagar/SAMARTHYA-EVENTS/Beat-Blaze-NYE-Party/AA00087';
+    }
+  }, [location]);
 
   useEffect(() => {
     // Calculate countdown to December 31, 2025
