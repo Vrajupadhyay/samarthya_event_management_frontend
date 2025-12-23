@@ -10,11 +10,11 @@ const SportsAcademyRegister = () => {
   const [registrationOpen, setRegistrationOpen] = useState(true);
   const [checkingStatus, setCheckingStatus] = useState(true);
   const [error, setError] = useState('');
-  const [promocodeLoading, setPromocodeLoading] = useState(false);
-  const [promocodeData, setPromocodeData] = useState(null);
-  const [promocodeInput, setPromocodeInput] = useState('');
   const [paymentQRCode, setPaymentQRCode] = useState('');
   const [paymentUPIURL, setPaymentUPIURL] = useState('');
+  
+  // Fixed price for 7 sports members
+  const FIXED_PRICE = 4999;
   
   // Check registration status on mount
   // COMMENTED OUT - Registration status check disabled
@@ -41,15 +41,14 @@ const SportsAcademyRegister = () => {
   }, []);
   
   const [formData, setFormData] = useState({
-    type: 'Individual',
+    type: 'Team',
     firstName: '',
     lastName: '',
     mobile: '',
     email: '',
     gender: 'Male',
     paymentMode: 'Online',
-    promocode: '',
-    additionalMembers: []
+    additionalMembers: Array(6).fill(null).map(() => ({ firstName: '', lastName: '', gender: 'Male' }))
   });
 
   const handleChange = (e) => {
@@ -61,18 +60,6 @@ const SportsAcademyRegister = () => {
     setError('');
   };
 
-  const handleTypeChange = (type) => {
-    setFormData(prev => ({
-      ...prev,
-      type,
-      additionalMembers: type === 'Individual' 
-        ? []
-        : type === 'Couple' 
-        ? [{ firstName: '', lastName: '', gender: 'Male' }]
-        : prev.additionalMembers
-    }));
-  };
-
   const handleMemberChange = (index, field, value) => {
     setFormData(prev => ({
       ...prev,
@@ -80,44 +67,6 @@ const SportsAcademyRegister = () => {
         i === index ? { ...member, [field]: value } : member
       )
     }));
-  };
-
-  const validatePromocode = async () => {
-    if (!promocodeInput.trim()) {
-      setError('Please enter a promocode');
-      return;
-    }
-
-    setPromocodeLoading(true);
-    setError('');
-
-    try {
-      const result = await promocodeAPI.validate(promocodeInput.trim());
-
-      if (result.success) {
-        setPromocodeData(result.data);
-        setFormData(prev => ({ ...prev, promocode: result.data.code }));
-        setError('');
-      } else {
-        setPromocodeData(null);
-        setFormData(prev => ({ ...prev, promocode: '' }));
-        setError(result.message || 'Invalid promocode');
-      }
-    } catch (err) {
-      console.error('Error validating promocode:', err);
-      setPromocodeData(null);
-      setFormData(prev => ({ ...prev, promocode: '' }));
-      setError(err.message || 'Failed to validate promocode');
-    } finally {
-      setPromocodeLoading(false);
-    }
-  };
-
-  const removePromocode = () => {
-    setPromocodeData(null);
-    setPromocodeInput('');
-    setFormData(prev => ({ ...prev, promocode: '' }));
-    setError('');
   };
 
   const validateForm = () => {
@@ -128,8 +77,8 @@ const SportsAcademyRegister = () => {
     if (!formData.email.trim()) return 'Email is required';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) return 'Invalid email address';
     
-    if (formData.type === 'Couple' && formData.additionalMembers.length !== 1) {
-      return 'Couple registration requires 2 members total';
+    if (formData.additionalMembers.length !== 6) {
+      return 'Sports team registration requires exactly 7 members';
     }
 
     for (let i = 0; i < formData.additionalMembers.length; i++) {
@@ -163,18 +112,15 @@ const SportsAcademyRegister = () => {
         
         // Reset form for next registration
         setFormData({
-          type: 'Individual',
+          type: 'Team',
           firstName: '',
           lastName: '',
           mobile: '',
           email: '',
           gender: 'Male',
           paymentMode: 'Online',
-          promocode: '',
-          additionalMembers: []
+          additionalMembers: Array(6).fill(null).map(() => ({ firstName: '', lastName: '', gender: 'Male' }))
         });
-        setPromocodeData(null);
-        setPromocodeInput('');
       }
     } catch (err) {
       setError(err.message || 'Registration failed. Please try again.');
@@ -183,17 +129,8 @@ const SportsAcademyRegister = () => {
     }
   };
 
-  // Calculate amount based on promocode or default prices
-  const getAmount = () => {
-    if (promocodeData) {
-      return formData.type === 'Individual' ? promocodeData.individualPrice : promocodeData.couplePrice;
-    }
-    return formData.type === 'Individual' ? 1149 : 1999;
-  };
-
-  const amount = getAmount();
-  const originalAmount = formData.type === 'Individual' ? 1149 : 1999;
-  const discount = originalAmount - amount;
+  // Fixed amount for 7 sports members
+  const amount = FIXED_PRICE;
 
   // Generate UPI QR Code whenever amount changes
   useEffect(() => {
@@ -231,8 +168,8 @@ const SportsAcademyRegister = () => {
   return (
     <div className="register-container">
       <div className="register-header">
-        <h1>Event Registration</h1>
-        <p>31st December BEAT BLAZE 2025</p>
+        <h1>Sports Academy Registration</h1>
+        <p>7-Member Team Registration - BEAT BLAZE 2025</p>
       </div>
 
       <div className="register-content">
@@ -254,70 +191,25 @@ const SportsAcademyRegister = () => {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="register-form">
-          {/* Registration Type */}
+          {/* Registration Info */}
           <div className="form-section">
-            <h3>Select Registration Type</h3>
-            <div className="type-selector">
-              <div
-                className={`type-option ${formData.type === 'Individual' ? 'active' : ''}`}
-                onClick={() => handleTypeChange('Individual')}
-              >
-                <div className="type-info">
-                  <h4>Individual</h4>
-                  <p className="type-desc">For 1 person</p>
-                </div>
-                <p className="type-price">
-                  {promocodeData ? (
-                    <>
-                      {promocodeData.individualPrice === 0 ? (
-                        <span className="free-price">FREE</span>
-                      ) : (
-                        <>
-                          <span className="original-price-small">₹1,149</span>
-                          <span className="discounted-price">₹{promocodeData.individualPrice}</span>
-                        </>
-                      )}
-                    </>
-                  ) : (
-                    '₹1,149'
-                  )}
-                </p>
-              </div>
-              <div
-                className={`type-option ${formData.type === 'Couple' ? 'active' : ''}`}
-                onClick={() => handleTypeChange('Couple')}
-              >
-                <div className="type-info">
-                  <h4>Couple</h4>
-                  <p className="type-desc">For 2 persons</p>
-                </div>
-                <p className="type-price">
-                  {promocodeData ? (
-                    <>
-                      {promocodeData.couplePrice === 0 ? (
-                        <span className="free-price">FREE</span>
-                      ) : (
-                        <>
-                          <span className="original-price-small">₹1,999</span>
-                          <span className="discounted-price">₹{promocodeData.couplePrice}</span>
-                        </>
-                      )}
-                    </>
-                  ) : (
-                    '₹1,999'
-                  )}
-                </p>
-              </div>
+            <h3>🏆 7-Member Sports Team Registration</h3>
+            <div className="info-banner" style={{ background: 'rgba(76, 175, 80, 0.1)', borderLeft: '4px solid #4caf50' }}>
+              <span className="info-icon">👥</span>
+              <span><strong>Team Registration:</strong> Register your complete 7-member sports team for BEAT BLAZE 2025</span>
             </div>
-            <div className="info-banner" style={{ background: 'rgba(255, 215, 0, 0.1)', borderLeft: '4px solid #ffd700', marginTop: '15px' }}>
-              <span className="info-icon">👶</span>
-              <span><strong>Child Policy:</strong> Below 5 years - Free entry | Above 5 years - Individual ticket required</span>
+            <div className="type-option active" style={{ marginTop: '15px', cursor: 'default' }}>
+              <div className="type-info">
+                <h4>Sports Team (7 Members)</h4>
+                <p className="type-desc">Team Captain + 6 Team Members</p>
+              </div>
+              <p className="type-price">₹{FIXED_PRICE.toLocaleString()}</p>
             </div>
           </div>
 
-          {/* Main Member Details */}
+          {/* Team Captain Details */}
           <div className="form-section">
-            <h3>Main Member Details</h3>
+            <h3>Team Captain Details</h3>
             <div className="form-grid">
               <div className="form-group">
                 <label>First Name *</label>
@@ -383,75 +275,64 @@ const SportsAcademyRegister = () => {
                   value={formData.paymentMode}
                   onChange={handleChange}
                   required
-                  disabled={amount === 0}
                 >
                   <option value="Online">Online</option>
                 </select>
-                {amount === 0 && (
-                  <p className="payment-free-note">
-                    💚 No payment required - Free registration
-                  </p>
-                )}
               </div>
             </div>
           </div>
 
-          {/* Additional Members - Couple */}
-          {formData.type === 'Couple' && (
-            <div className="form-section">
-              <h3>Partner Details</h3>
-              <div className="info-banner">
-                <span className="info-icon">ℹ️</span>
-                <span>Couple registration includes 2 persons (You + Partner)</span>
-              </div>
-              <div className="info-banner" style={{ background: 'rgba(255, 215, 0, 0.1)', borderLeft: '4px solid #ffd700', marginTop: '10px' }}>
-                <span><strong>Child Policy:</strong> Below 5 years - Free entry | Above 5 years - Individual ticket required</span>
-              </div>
+          {/* Team Members */}
+          <div className="form-section">
+            <h3>Team Members (6 Members)</h3>
+            <div className="info-banner">
+              <span className="info-icon">ℹ️</span>
+              <span>Enter details for all 6 team members (excluding Team Captain)</span>
+            </div>
 
-              {formData.additionalMembers.map((member, index) => (
-                <div key={index}>
-                  <div className="form-grid">
-                    <div className="form-group">
-                      <label>First Name *</label>
-                      <input
-                        type="text"
-                        value={member.firstName}
-                        onChange={(e) => handleMemberChange(index, 'firstName', e.target.value)}
-                        placeholder="Enter first name"
-                        required
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Last Name *</label>
-                      <input
-                        type="text"
-                        value={member.lastName}
-                        onChange={(e) => handleMemberChange(index, 'lastName', e.target.value)}
-                        placeholder="Enter last name"
-                        required
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label>Gender *</label>
-                      <select
-                        value={member.gender}
-                        onChange={(e) => handleMemberChange(index, 'gender', e.target.value)}
-                        required
-                      >
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
-                      </select>
-                    </div>
+            {formData.additionalMembers.map((member, index) => (
+              <div key={index} style={{ marginBottom: '20px', paddingBottom: '20px', borderBottom: index < 5 ? '1px solid #eee' : 'none' }}>
+                <h4 style={{ marginBottom: '15px', color: '#4caf50' }}>Member {index + 2}</h4>
+                <div className="form-grid">
+                  <div className="form-group">
+                    <label>First Name *</label>
+                    <input
+                      type="text"
+                      value={member.firstName}
+                      onChange={(e) => handleMemberChange(index, 'firstName', e.target.value)}
+                      placeholder="Enter first name"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Last Name *</label>
+                    <input
+                      type="text"
+                      value={member.lastName}
+                      onChange={(e) => handleMemberChange(index, 'lastName', e.target.value)}
+                      placeholder="Enter last name"
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Gender *</label>
+                    <select
+                      value={member.gender}
+                      onChange={(e) => handleMemberChange(index, 'gender', e.target.value)}
+                      required
+                    >
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+              </div>
+            ))}
+          </div>
 
           {/* PhonePe Payment QR Code Section */}
-          {amount > 0 && (
-            <div className="form-section payment-section">
+          <div className="form-section payment-section">
               <h3>💳 Online Payment</h3>
               <div className="payment-qr-container">
                 <div className="payment-instructions">
@@ -531,82 +412,6 @@ const SportsAcademyRegister = () => {
                   If payment is not completed, your registration will <strong>NOT</strong> be considered valid and will be <strong>REJECTED</strong>.
                 </p>
               </div>
-            </div>
-          )}
-
-          {/* Promocode Section */}
-          <div className="form-section">
-            <h3>🎁 Promocode (Optional)</h3>
-            {!promocodeData ? (
-              <div className="promocode-input-section">
-                <div className="form-group">
-                  <label>Have a promocode?</label>
-                  <div className="promocode-input-wrapper">
-                    <input
-                      type="text"
-                      value={promocodeInput}
-                      onChange={(e) => setPromocodeInput(e.target.value.toUpperCase())}
-                      placeholder="Enter promocode for discount or free registration"
-                      className="promocode-input"
-                      disabled={promocodeLoading}
-                    />
-                    <button
-                      type="button"
-                      onClick={validatePromocode}
-                      className="validate-promocode-btn"
-                      disabled={promocodeLoading || !promocodeInput.trim()}
-                    >
-                      {promocodeLoading ? 'Checking...' : 'Apply'}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="promocode-applied">
-                <div className="promocode-success">
-                  <span className="success-icon">✅</span>
-                  <div className="success-details">
-                    <strong>Promocode Applied: {promocodeData.code}</strong>
-                    <p>Remaining uses: {promocodeData.remaining}</p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={removePromocode}
-                    className="remove-promocode-btn"
-                  >
-                    Remove
-                  </button>
-                </div>
-                
-                {amount === 0 ? (
-                  /* Free Registration Display */
-                  <div className="free-registration-banner">
-                    <h3>FREE REGISTRATION</h3>
-                    {/* <p>This promocode grants you complimentary access!</p> */}
-                    <div className="free-details">
-                      <p>For: Special Guests</p>
-                      <p>Registration Fee: <strong className="free-amount">FREE (₹0)</strong></p>
-                    </div>
-                  </div>
-                ) : (
-                  /* Discounted Price Display */
-                  <div className="price-breakdown">
-                    <div className="price-row">
-                      <span>Original Price:</span>
-                      <span className="original-price">₹{originalAmount.toLocaleString()}</span>
-                    </div>
-                    <div className="price-row discount">
-                      <span>Discount:</span>
-                      <span>-₹{discount.toLocaleString()}</span>
-                    </div>
-                    <div className="price-row final">
-                      <span>Final Price:</span>
-                      <strong>₹{amount.toLocaleString()}</strong>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
           </div>
 
           {/* Summary */}
@@ -615,27 +420,19 @@ const SportsAcademyRegister = () => {
             <div className="summary-grid">
               <div className="summary-item">
                 <span>Registration Type:</span>
-                <strong>{formData.type}</strong>
+                <strong>Sports Team (7 Members)</strong>
               </div>
               <div className="summary-item">
                 <span>Total Members:</span>
-                <strong>{1 + formData.additionalMembers.length}</strong>
+                <strong>7 (1 Captain + 6 Members)</strong>
               </div>
               <div className="summary-item">
                 <span>Payment Mode:</span>
                 <strong>{formData.paymentMode}</strong>
               </div>
-              {promocodeData && (
-                <div className="summary-item">
-                  <span>Promocode:</span>
-                  <strong className="promo-code-highlight">{promocodeData.code}</strong>
-                </div>
-              )}
               <div className="summary-item total">
                 <span>Total Amount:</span>
-                <strong className={amount === 0 ? 'free-amount' : ''}>
-                  {amount === 0 ? 'FREE (₹0)' : `₹${amount.toLocaleString()}`}
-                </strong>
+                <strong>₹{amount.toLocaleString()}</strong>
               </div>
             </div>
           </div>
